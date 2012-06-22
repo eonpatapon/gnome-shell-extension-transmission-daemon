@@ -1,0 +1,49 @@
+.progress-bar {
+    -background: #444;
+    -bar-height: 12px;
+    -bar-color: #333333;
+    -bar-border-width: 2px;
+    -bar-border-color: #5f5f5f;
+    -download-color: #76b0ec;
+    -download-border-color: #1f6dbc;
+    -seed-color: #45E43C;
+    -seed-border-color: #298924;
+    -uploaded-color: #36B22F;
+    -idle-color: #888;
+    -idle-border-color: #666;
+    padding: 2px 10px 2px 25px;
+}
+
+.torrent-name {
+    font-weight: bold;
+    padding: .5em 10px 3px 25px;
+}
+
+.torrent-infos {
+    font-size: 80%;
+    padding: 0 10px 0 25px;
+}
+
+.size-info {
+    padding-bottom: .5em;
+}
+
+.button {
+    padding:  0 5px 0 0;
+}
+
+.button StIcon {
+    icon-size: 20px;
+}
+
+.torrent-button {
+    padding:  0 3px 0 0;
+}
+
+.torrent-button StIcon {
+    icon-size: 16px;
+}
+
+.error {
+    color: red;
+}

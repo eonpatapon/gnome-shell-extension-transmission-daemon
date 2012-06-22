@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions-transmission-daemon">
+  <schema path="/org/gnome/shell/extensions/transmission-daemon/" id="org.gnome.shell.extensions.transmission-daemon">
+    <key type="s" name="host">
+        <default>"localhost"</default>
+        <summary>Hostname</summary>
+        <description>Hostname</description>
+    </key>
+    <key type="i" name="port">
+        <default>9091</default>
+        <summary>Port</summary>
+        <description>Port</description>
+    </key>
+    <key type="s" name="user">
+        <default>""</default>
+        <summary>Username</summary>
+        <description>Username</description>
+    </key>
+    <key type="s" name="password">
+        <default>""</default>
+        <summary>Password</summary>
+        <description>Password</description>
+    </key>
+    <key type="s" name="url">
+        <default>"/transmission/"</default>
+        <summary>RPC Url</summary>
+        <description>RPC Url</description>
+    </key>
+    <key type="b" name="stats-torrents">
+        <default>true</default>
+        <summary>Show number of torrents</summary>
+        <description>Show the number of torrents in the status bar</description>
+    </key>
+    <key type="b" name="stats-icons">
+        <default>true</default>
+        <summary>Show upload and download icons</summary>
+        <description>Show upload and download icons in the status bar</description>
+    </key>
+    <key type="b" name="stats-numeric">
+        <default>false</default>
+        <summary>Show upload and download speed</summary>
+        <description>Show upload and download speed in the status bar</description>
+    </key>
+  </schema>
+</schemalist>
