@@ -14,7 +14,7 @@ const Gio = imports.gi.Gio;
 
 const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
-const enabledIcon = "system-run";
+const enabledIcon = "transmission";
 const disabledIcon = "dialog-warning";
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
