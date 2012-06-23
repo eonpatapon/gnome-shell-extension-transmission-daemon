@@ -15,7 +15,7 @@ const Gio = imports.gi.Gio;
 const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
 const enabledIcon = "transmission";
-const disabledIcon = "dialog-warning";
+const errorIcon = "dialog-warning";
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Lib = Me.imports.lib;
@@ -316,7 +316,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
     connectionError: function(error) {
         if (this._enabled) {
             this.removeTorrents();
-            this._icon.icon_name = disabledIcon;
+            this._icon.icon_name = errorIcon;
             this._status.text = "";
             this.menu.controls.setInfo(error);
             this.menu.controls.removeControls();
@@ -807,7 +807,7 @@ const TorrentsMenu = new Lang.Class({
         this.parent(sourceActor, 0.0, St.Side.TOP);
         
         // override base style
-        this.actor.set_style('min-width: 300px');
+        this.actor.set_style('min-width: 400px');
 
         this.controls = new TorrentsControls();
 
