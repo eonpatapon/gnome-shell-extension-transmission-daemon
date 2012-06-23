@@ -51,15 +51,26 @@ if (Soup.Session.prototype.add_feature != null)
 const TransmissionDaemonMonitor = new Lang.Class({
     Name: 'TransmissionDaemonMonitor',
 
-    _init: function(host, port, rpc_url) {
-        this._url = 'http://%s:%s%srpc/'.format(host, port, rpc_url);
+    _init: function() {
+        this._url = "";
         this._session_id = false;
         this._torrents = false;
         this._stats = false;
         this._timers = {};
         this._interval = 10;
         _httpSession.connect("authenticate", Lang.bind(this, this.authenticate));
+        this.updateURL();
         this.retrieveInfos();
+        gsettings.connect("changed", Lang.bind(this, function() {
+            this.updateURL();
+        }));
+    },
+
+    updateURL: function() {
+        let host = gsettings.get_string(TDAEMON_HOST_KEY);
+        let port = gsettings.get_int(TDAEMON_PORT_KEY);
+        let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
+        this._url = 'http://%s:%s%srpc/'.format(host, port.toString(), rpc_url);
     },
 
     authenticate: function(session, message, auth, retrying) {
@@ -176,9 +187,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
             //log(message.response_body.data);
             let response = JSON.parse(message.response_body.data);
             this._torrents = response.arguments.torrents;
-            log("Get list");
             transmissionDaemonIndicator.updateList();
-            log("Update done");
             if (!this._timers.list) {
                 this._timers.list = Mainloop.timeout_add_seconds(
                                         this._interval,
@@ -275,12 +284,12 @@ const TransmissionDaemonIndicator = new Lang.Class({
     Name: 'TransmissionDaemonIndicator',
     Extends: PanelMenu.Button,
 
-    _init: function(host, port) {
+    _init: function() {
         this.parent(0.0, "transmission-daemon");
 
         this._torrents = {};
         this._monitor = transmissionDaemonMonitor;
-        this._url = 'http://%s:%s/transmission/web/'.format(host, port);
+        this._url = "";
         this._enabled = false;
 
         this._indicatorBox = new St.BoxLayout();
@@ -297,12 +306,21 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.setMenu(new TorrentsMenu(this.actor));
 
         this.updateStatsOptions();
+        this.updateURL();
         gsettings.connect("changed", Lang.bind(this, function() {
             this.updateStatsOptions();
-            this.updateStats();
+            this.updateURL();
+            this.updateStats(true);
         }));
 
         this.addErrorControls();
+    },
+
+    updateURL: function() {
+        let host = gsettings.get_string(TDAEMON_HOST_KEY);
+        let port = gsettings.get_int(TDAEMON_PORT_KEY);
+        let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
+        this._url = 'http://%s:%s%sweb/'.format(host, port.toString(), rpc_url);
     },
 
     _onOpenStateChanged: function(menu, open) {
@@ -340,7 +358,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._status_show_numeric = gsettings.get_boolean(TDAEMON_STATS_NUMERIC_KEY);
     },
 
-    updateStats: function() {
+    updateStats: function(dontChangeState) {
         let stats = this._monitor.getStats();
         let stats_text = "";
         let info_text;
@@ -373,7 +391,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                             readableSize(stats.uploadSpeed));
         this.menu.controls.setInfo(info_text);
 
-        this.connectionAvailable();
+        if (!dontChangeState)
+            this.connectionAvailable();
     },
 
     addControls: function() {
@@ -862,11 +881,8 @@ function init(extensionMeta) {
 }
 
 function enable() {
-    let host = gsettings.get_string(TDAEMON_HOST_KEY);
-    let port = gsettings.get_int(TDAEMON_PORT_KEY).toString();
-    let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-    transmissionDaemonMonitor = new TransmissionDaemonMonitor(host, port, rpc_url);
-    transmissionDaemonIndicator = new TransmissionDaemonIndicator(host, port);
+    transmissionDaemonMonitor = new TransmissionDaemonMonitor();
+    transmissionDaemonIndicator = new TransmissionDaemonIndicator();
     Main.panel.addToStatusArea('transmission-daemon', transmissionDaemonIndicator);
 }
 
