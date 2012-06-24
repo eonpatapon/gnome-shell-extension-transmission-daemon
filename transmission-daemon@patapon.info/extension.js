@@ -307,6 +307,16 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._monitor = transmissionDaemonMonitor;
         this._url = "";
         this._enabled = false;
+        this._nb_torrents = 0;
+
+        this._stop_btn = new Button('media-playback-pause', 'Pause all torrents',
+                                    Lang.bind(this, this.stopAll));
+        this._start_btn = new Button('media-playback-start', 'Start all torrents',
+                                     Lang.bind(this, this.startAll));
+        this._web_btn = new Button('web-browser', 'Open Web UI',
+                                   Lang.bind(this, this.launchWebUI));
+        this._pref_btn = new Button('preferences-system', 'Preferences',
+                                    Lang.bind(this, this.launchPrefs));
 
         this._indicatorBox = new St.BoxLayout();
         this._icon = new St.Icon({icon_name: enabledIcon,
@@ -329,7 +339,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this.updateStats(true);
         }));
 
-        this.addErrorControls();
+        this.refreshControls(false);
     },
 
     updateURL: function() {
@@ -353,19 +363,18 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._icon.icon_name = errorIcon;
             this._status.text = "";
             this.menu.controls.setInfo(error);
-            this.menu.controls.removeControls();
-            this.addErrorControls();
             this._enabled = false;
+            this.refreshControls(true);
         }
     },
 
     connectionAvailable: function() {
         if (!this._enabled) {
             this._icon.icon_name = enabledIcon;
-            this.menu.controls.removeControls();
-            this.addControls();
             this._enabled = true;
+            this.refreshControls(true);
         }
+        this.refreshControls(false);
     },
 
     updateStatsOptions: function() {
@@ -377,7 +386,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
     updateStats: function(dontChangeState) {
         let stats = this._monitor.getStats();
         let stats_text = "";
-        let info_text;
+        let info_text = "";
+
+        this._nb_torrents = stats.torrentCount;
 
         if (this._status_show_torrents && stats.torrentCount > 0)
             stats_text += stats.torrentCount;
@@ -400,35 +411,41 @@ const TransmissionDaemonIndicator = new Lang.Class({
 
         this._status.text = stats_text;
 
-        info_text = "%s %s/s / %s %s/s".format(
+        if (this._nb_torrents > 0) {
+            info_text = "%s %s/s / %s %s/s".format(
                                             downArrow,
                                             readableSize(stats.downloadSpeed),
                                             upArrow,
                                             readableSize(stats.uploadSpeed));
+        }
+        else {
+            info_text = "No torrent";
+        }
+
         this.menu.controls.setInfo(info_text);
 
         if (!dontChangeState)
             this.connectionAvailable();
     },
 
-    addControls: function() {
-        let stop_btn = new Button('media-playback-pause', 'Pause all torrents',
-                                  Lang.bind(this, this.stopAll));
-        let start_btn = new Button('media-playback-start', 'Start all torrents',
-                                   Lang.bind(this, this.startAll));
-        let web_btn = new Button('web-browser', 'Open Web UI',
-                                 Lang.bind(this, this.launchWebUI));
+    refreshControls: function(state_changed) {
+        if (state_changed)
+            this.menu.controls.removeControls();
 
-        this.menu.controls.addControl(web_btn);
-        this.menu.controls.addControl(stop_btn);
-        this.menu.controls.addControl(start_btn);
-    },
-
-    addErrorControls: function() {
-        let pref_btn = new Button("preferences-system","Preferences",
-                                  Lang.bind(this, this.launchPrefs));
-
-        this.menu.controls.addControl(pref_btn);
+        if (this._enabled) {
+            this.menu.controls.addControl(this._web_btn);
+            if (this._nb_torrents > 0) {
+                this.menu.controls.addControl(this._stop_btn);
+                this.menu.controls.addControl(this._start_btn);
+            }
+            else {
+                this.menu.controls.removeControl(this._stop_btn);
+                this.menu.controls.removeControl(this._start_btn);
+            }
+        }
+        else {
+            this.menu.controls.addControl(this._pref_btn);
+        }
     },
 
     stopAll: function() {
@@ -746,22 +763,22 @@ const TorrentName = new Lang.Class({
             case TransmissionStatus.STOPPED:
             case TransmissionStatus.CHECK_WAIT:
             case TransmissionStatus.CHECK:
-                start_stop_btn = new Button("media-playback-start", "",
+                start_stop_btn = new Button("media-playback-start", null,
                                             Lang.bind(this, this.start),
                                             "torrent-button", 3);
                 break;
             default:
-                start_stop_btn = new Button("media-playback-pause", "",
+                start_stop_btn = new Button("media-playback-pause", null,
                                             Lang.bind(this, this.stop),
                                             "torrent-button", 3);
                 break;
         }
-        let remove_btn = new Button("user-trash", "",
+        let remove_btn = new Button("user-trash", null,
                                     Lang.bind(this, this.remove),
                                     "torrent-button", 3);
 
-        this.box.add(start_stop_btn.actor);
-        this.box.add(remove_btn.actor);
+        this.box.add(start_stop_btn);
+        this.box.add(remove_btn);
     },
 });
 
@@ -787,33 +804,44 @@ const TorrentsControls = new Lang.Class({
             this.info.text = text;
     },
 
-    addControl: function(button) {
-        this.box.add(button.actor);
-        button.actor.connect('notify::hover', Lang.bind(this, function(button) {
-            this.hover = button.hover;
-            if (this.hover) {
-                if (button._info != this.info.text)
-                    this._old_info = this.info.text;
-                this.info.text = button._info;
-            }
-            else
-                this.info.text = this._old_info;
-        }));
+    addControl: function(button, name) {
+        if (!this.box.contains(button)) {
+            this.box.add_actor(button);
+            button.connect('notify::hover', Lang.bind(this, function(button) {
+                this.hover = button.hover;
+                if (this.hover) {
+                    if (button._info != this.info.text)
+                        this._old_info = this.info.text;
+                    this.info.text = button._info;
+                }
+                else
+                    this.info.text = this._old_info;
+            }));
+        }
+    },
+
+    removeControl: function(button, name) {
+        if (this.box.contains(button))
+            this.box.remove_actor(button);
     },
 
     removeControls: function() {
-        this.box.destroy_all_children();
+        this.box.get_children().forEach(Lang.bind(this, function(b) {
+            this.removeControl(b);
+        }));
     }
 });
 
 const Button = new Lang.Class({
     Name: 'Button',
+    Extends: St.Bin,
 
     _init: function(icon, info, callback, style, padding) {
         if (!style) style = 'button';
-        this.actor = new St.Bin({style_class: style,
-                                 reactive: true, can_focus: true,
-                                 track_hover: true});
+        this.parent({style_class: style,
+                     reactive: true, can_focus: true,
+                     track_hover: true});
+
         this.icon = new St.Icon({
             icon_type: St.IconType.SYMBOLIC,
             icon_name: icon,
@@ -821,17 +849,18 @@ const Button = new Lang.Class({
         this.button = new St.Button({style_class: 'hotplug-resident-eject-button',
                                      child: this.icon});
         this.button.connect('clicked', callback);
-        this.actor.add_actor(this.button);
+
+        this.add_actor(this.button);
 
         if (padding != null)
             this.button.set_style('padding: %spx'.format(padding.toString()));
 
-        this.actor._info = info;
+        this._info = info;
     },
 
     setIcon: function(icon) {
         this.icon.icon_name = icon;
-    },
+    }
 });
 
 const TorrentsMenu = new Lang.Class({
@@ -840,7 +869,7 @@ const TorrentsMenu = new Lang.Class({
 
     _init: function(sourceActor) {
         this.parent(sourceActor, 0.0, St.Side.TOP);
-        
+
         // override base style
         this._boxWrapper.set_style('min-width: 400px');
 
