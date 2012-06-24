@@ -842,7 +842,7 @@ const TorrentsMenu = new Lang.Class({
         this.parent(sourceActor, 0.0, St.Side.TOP);
         
         // override base style
-        this.actor.set_style('min-width: 400px');
+        this._boxWrapper.set_style('min-width: 400px');
 
         this.controls = new TorrentsControls();
 
