@@ -833,12 +833,11 @@ const Button = new Lang.Class({
 
     _init: function(icon, info, callback, type) {
 
-        if (!type) {
-            style= 'torrents-control';
-            icon_size = 20;
-            padding = 8;
-        }
-        else if (type == "small") {
+        let style= 'torrents-control';
+        let icon_size = 20;
+        let padding = 8;
+
+        if (type && type == "small") {
             style= 'torrent-control';
             icon_size = 16;
             padding = 3;
