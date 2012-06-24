@@ -28,22 +28,12 @@
     padding-bottom: .5em;
 }
 
-.button {
+.torrents-control {
     padding:  0 5px 0 0;
 }
 
-.button StIcon {
-    icon-size: 20px;
-    color: white;
-}
-
-.torrent-button {
+.torrent-control {
     padding:  0 3px 0 0;
-}
-
-.torrent-button StIcon {
-    icon-size: 16px;
-    color: white;
 }
 
 .error {

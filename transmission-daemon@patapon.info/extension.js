@@ -764,18 +764,15 @@ const TorrentName = new Lang.Class({
             case TransmissionStatus.CHECK_WAIT:
             case TransmissionStatus.CHECK:
                 start_stop_btn = new Button("media-playback-start", null,
-                                            Lang.bind(this, this.start),
-                                            "torrent-button", 3);
+                                            Lang.bind(this, this.start), "small");
                 break;
             default:
                 start_stop_btn = new Button("media-playback-pause", null,
-                                            Lang.bind(this, this.stop),
-                                            "torrent-button", 3);
+                                            Lang.bind(this, this.stop), "small");
                 break;
         }
         let remove_btn = new Button("user-trash", null,
-                                    Lang.bind(this, this.remove),
-                                    "torrent-button", 3);
+                                    Lang.bind(this, this.remove), "small");
 
         this.box.add(start_stop_btn);
         this.box.add(remove_btn);
@@ -836,24 +833,36 @@ const Button = new Lang.Class({
     Name: 'Button',
     Extends: St.Bin,
 
-    _init: function(icon, info, callback, style, padding) {
-        if (!style) style = 'button';
-        this.parent({style_class: style,
-                     reactive: true, can_focus: true,
+    _init: function(icon, info, callback, type) {
+
+        if (!type) {
+            style= 'torrents-control';
+            icon_size = 20;
+            padding = 8;
+        }
+        else if (type == "small") {
+            style= 'torrent-control';
+            icon_size = 16;
+            padding = 3;
+        }
+
+        this.parent({reactive: true, can_focus: true, style_class: style,
                      track_hover: true});
 
         this.icon = new St.Icon({
             icon_type: St.IconType.SYMBOLIC,
             icon_name: icon,
+            icon_size: icon_size,
         });
-        this.button = new St.Button({style_class: 'hotplug-resident-eject-button',
+        this.button = new St.Button({style_class: 'notification-icon-button',
                                      child: this.icon});
         this.button.connect('clicked', callback);
 
         this.add_actor(this.button);
 
-        if (padding != null)
-            this.button.set_style('padding: %spx'.format(padding.toString()));
+        // override base style
+        this.icon.set_style('padding: 0px');
+        this.button.set_style('padding: %spx'.format(padding.toString()));
 
         this._info = info;
     },
