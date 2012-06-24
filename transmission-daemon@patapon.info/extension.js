@@ -358,14 +358,12 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     connectionError: function(error) {
-        if (this._enabled) {
-            this.removeTorrents();
-            this._icon.icon_name = errorIcon;
-            this._status.text = "";
-            this.menu.controls.setInfo(error);
-            this._enabled = false;
-            this.refreshControls(true);
-        }
+        this.removeTorrents();
+        this._icon.icon_name = errorIcon;
+        this._status.text = "";
+        this.menu.controls.setInfo(error);
+        this._enabled = false;
+        this.refreshControls(true);
     },
 
     connectionAvailable: function() {
