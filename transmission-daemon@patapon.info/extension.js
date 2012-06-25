@@ -321,14 +321,16 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._nb_torrents = 0;
         this._always_show = false;
 
-        this._stop_btn = new Button('media-playback-pause', 'Pause all torrents',
-                                    Lang.bind(this, this.stopAll));
-        this._start_btn = new Button('media-playback-start', 'Start all torrents',
-                                     Lang.bind(this, this.startAll));
-        this._web_btn = new Button('web-browser', 'Open Web UI',
-                                   Lang.bind(this, this.launchWebUI));
-        this._pref_btn = new Button('preferences-system', 'Preferences',
-                                    Lang.bind(this, this.launchPrefs));
+        this._stop_btn = new ControlButton('media-playback-pause',
+                                           'Pause all torrents',
+                                           Lang.bind(this, this.stopAll));
+        this._start_btn = new ControlButton('media-playback-start',
+                                            'Start all torrents',
+                                            Lang.bind(this, this.startAll));
+        this._web_btn = new ControlButton('web-browser', 'Open Web UI',
+                                          Lang.bind(this, this.launchWebUI));
+        this._pref_btn = new ControlButton('preferences-system', 'Preferences',
+                                           Lang.bind(this, this.launchPrefs));
 
         this._indicatorBox = new St.BoxLayout();
         this._icon = new St.Icon({icon_name: enabledIcon,
@@ -753,7 +755,8 @@ const TorrentName = new Lang.Class({
         this.id = params.id;
         this.status = params.status;
 
-        this.box = new St.BoxLayout({vertical: false});
+        this.box = new St.BoxLayout({vertical: false,
+                                     style_class: 'torrent-controls'});
 
         let name_label = new St.Label({text: params.name});
 
@@ -787,16 +790,19 @@ const TorrentName = new Lang.Class({
             case TransmissionStatus.STOPPED:
             case TransmissionStatus.CHECK_WAIT:
             case TransmissionStatus.CHECK:
-                start_stop_btn = new Button("media-playback-start", null,
-                                            Lang.bind(this, this.start), "small");
+                start_stop_btn = new ControlButton("media-playback-start", null,
+                                                   Lang.bind(this, this.start),
+                                                   "small");
                 break;
             default:
-                start_stop_btn = new Button("media-playback-pause", null,
-                                            Lang.bind(this, this.stop), "small");
+                start_stop_btn = new ControlButton("media-playback-pause", null,
+                                                   Lang.bind(this, this.stop),
+                                                   "small");
                 break;
         }
-        let remove_btn = new Button("user-trash", null,
-                                    Lang.bind(this, this.remove), "small");
+        let remove_btn = new ControlButton("user-trash", null,
+                                           Lang.bind(this, this.remove),
+                                           "small");
 
         this.box.add(start_stop_btn);
         this.box.add(remove_btn);
@@ -853,39 +859,34 @@ const TorrentsControls = new Lang.Class({
     }
 });
 
-const Button = new Lang.Class({
-    Name: 'Button',
-    Extends: St.Bin,
+const ControlButton = new Lang.Class({
+    Name: 'ControlButton',
+    Extends: St.Button,
 
     _init: function(icon, info, callback, type) {
 
-        let style= 'torrents-control';
         let icon_size = 20;
         let padding = 8;
-
         if (type && type == "small") {
-            style= 'torrent-control';
             icon_size = 16;
             padding = 3;
         }
-
-        this.parent({reactive: true, can_focus: true, style_class: style,
-                     track_hover: true});
 
         this.icon = new St.Icon({
             icon_type: St.IconType.SYMBOLIC,
             icon_name: icon,
             icon_size: icon_size,
         });
-        this.button = new St.Button({style_class: 'notification-icon-button',
-                                     child: this.icon});
-        this.button.connect('clicked', callback);
 
-        this.add_actor(this.button);
+        this.parent({style_class: 'notification-icon-button',
+                     child: this.icon});
+
+
+        this.connect('clicked', callback);
 
         // override base style
         this.icon.set_style('padding: 0px');
-        this.button.set_style('padding: %spx'.format(padding.toString()));
+        this.set_style('padding: %spx'.format(padding.toString()));
 
         this._info = info;
     },

@@ -28,12 +28,12 @@
     padding-bottom: .5em;
 }
 
-.torrents-control {
-    padding:  0 5px 0 0;
+.torrents-controls {
+    spacing: 5px;
 }
 
-.torrent-control {
-    padding:  0 3px 0 0;
+.torrent-controls {
+    spacing: 3px;
 }
 
 .error {
