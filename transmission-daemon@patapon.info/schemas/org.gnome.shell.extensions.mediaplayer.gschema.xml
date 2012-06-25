@@ -41,5 +41,10 @@
         <summary>Show upload and download speed</summary>
         <description>Show upload and download speed in the status bar</description>
     </key>
+    <key type="b" name="always-show">
+        <default>true</default>
+        <summary>Always show the indicator</summary>
+        <description>Always show the indicator even if transmission is not running</description>
+    </key>
   </schema>
 </schemalist>

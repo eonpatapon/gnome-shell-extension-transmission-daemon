@@ -55,6 +55,7 @@ const TDAEMON_RPC_URL_KEY = 'url';
 const TDAEMON_STATS_NB_TORRENTS_KEY = 'stats-torrents';
 const TDAEMON_STATS_ICONS_KEY = 'stats-icons';
 const TDAEMON_STATS_NUMERIC_KEY = 'stats-numeric';
+const TDAEMON_ALWAYS_SHOW_KEY = 'always-show';
 
 if (!_httpSession) {
     const _httpSession = new Soup.SessionAsync();
@@ -231,10 +232,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
                     case 404:
                         error = "Can't access to %s".format(this._url);
                         break;
-                    case 401:
-                        break;
                     default:
-                        error = "Can't connect to transmission-daemon";
+                        error = "Can't connect to Transmission";
                         break;
                 }
                 if (error)
@@ -308,6 +307,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._url = "";
         this._enabled = false;
         this._nb_torrents = 0;
+        this._always_show = gsettings.get_string(TDAEMON_ALWAYS_SHOW_KEY);
 
         this._stop_btn = new Button('media-playback-pause', 'Pause all torrents',
                                     Lang.bind(this, this.stopAll));
@@ -342,6 +342,14 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.refreshControls(false);
     },
 
+    hide: function() {
+        this.actor.hide();
+    },
+
+    show: function() {
+        this.actor.show();
+    },
+
     updateURL: function() {
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
@@ -358,6 +366,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     connectionError: function(error) {
+        if (!this._always_show)
+            this.hide();
         this.removeTorrents();
         this._icon.icon_name = errorIcon;
         this._status.text = "";
@@ -371,6 +381,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._icon.icon_name = enabledIcon;
             this._enabled = true;
             this.refreshControls(true);
+            this.show();
         }
         this.refreshControls(false);
     },

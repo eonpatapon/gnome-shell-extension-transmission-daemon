@@ -30,10 +30,11 @@ function init() {
     //Lib.initTranslations(Me);
     gsettings = Lib.getSettings(Me);
     settings = {
-        host: {label: _("Hostname"), type: 's'},
-        port: {label: _("Port"), type: 'i'},
-        user: {label: _("Username"), type: 's'},
-        password: {label: _("Password"), type: 's', mode: 'passwd'},
+        host: {label: _("Hostname"), help: _('Hostname or IP where Transmission is running'), type: 's'},
+        port: {label: _("Port"), help: _('Default is 9091'), type: 'i'},
+        user: {label: _("Username"), help: _('Username to authenticate to Transmission (optional)'), type: 's'},
+        password: {label: _("Password"), help: _('Password to authenticate to Transmission (optional)'), type: 's', mode: 'passwd'},
+        always_show: {label: _('Always show the indicator'), help: _('Show the indicator even if Transmission is not running'), type: 'b'},
         stats_torrents: {label: _('Show the number of torrents in the status bar'), type: 'b'},
         stats_icons: {label: _('Show upload and download icons in the status bar'), type: 'b'},
         stats_numeric: {label: _('Show upload and download speed in the status bar'), type: 'b'}
