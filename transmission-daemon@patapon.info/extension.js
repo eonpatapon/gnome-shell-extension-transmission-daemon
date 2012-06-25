@@ -163,48 +163,16 @@ const TransmissionDaemonMonitor = new Lang.Class({
             delete this._timers.stats
     },
 
-    start: function(torrent_id) {
+    torrentAction: function(action, torrent_id) {
         let params = {
-            method: "torrent-start",
-            arguments: {
-                ids: torrent_id
-            }
+            method: "torrent-%s".format(action),
         };
-        this.sendPost(params, this.onStart);
-    },
-
-    startAll: function() {
-        let params = {
-            method: "torrent-start"
-        };
-        this.sendPost(params, this.onStartAll);
-    },
-
-    stop: function(torrent_id) {
-        let params = {
-            method: "torrent-stop",
-            arguments: {
-                ids: torrent_id
-            }
-        };
-        this.sendPost(params, this.onStop);
-    },
-
-    stopAll: function() {
-        let params = {
-            method: "torrent-stop"
-        };
-        this.sendPost(params, this.onStopAll);
-    },
-
-    remove: function(torrent_id) {
-        let params = {
-            method: "torrent-remove",
-            arguments: {
+        if (torrent_id) {
+            params.arguments = {
                 ids: [torrent_id]
-            }
-        };
-        this.sendPost(params, this.onRemove);
+            };
+        }
+        this.sendPost(params, this.onTorrentAction);
     },
 
     processList: function(session, message) {
@@ -259,27 +227,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
         }
     },
 
-    onStart: function(session, message) {
-        if (message.status_code != 200)
-            log(message.response_body.data);
-    },
-
-    onStartAll: function(session, message) {
-        if (message.status_code != 200)
-            log(message.response_body.data);
-    },
-
-    onStop: function(session, message) {
-        if (message.status_code != 200)
-            log(message.response_body.data);
-    },
-
-    onStopAll: function(session, message) {
-        if (message.status_code != 200)
-            log(message.response_body.data);
-    },
-
-    onRemove: function(session, message) {
+    onTorrentAction: function(session, message) {
         if (message.status_code != 200)
             log(message.response_body.data);
     },
@@ -475,11 +423,11 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     stopAll: function() {
-        this._monitor.stopAll();
+        this._monitor.torrentAction("stop");
     },
 
     startAll: function() {
-        this._monitor.startAll();
+        this._monitor.torrentAction("start");
     },
 
     launchWebUI: function() {
@@ -767,15 +715,15 @@ const TorrentName = new Lang.Class({
     },
 
     start: function () {
-        transmissionDaemonMonitor.start(this.id);
+        transmissionDaemonMonitor.torrentAction("start", this.id);
     },
 
     stop: function () {
-        transmissionDaemonMonitor.stop(this.id);
+        transmissionDaemonMonitor.torrentAction("stop", this.id);
     },
 
     remove: function () {
-        transmissionDaemonMonitor.remove(this.id);
+        transmissionDaemonMonitor.torrentAction("remove", this.id);
     },
 
     update: function (params) {
