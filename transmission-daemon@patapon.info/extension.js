@@ -46,6 +46,12 @@ const TransmissionStatus = {
     SEED: 6
 }
 
+const ErrorType = {
+    NO_ERROR: 0,
+    CONNECTION_ERROR: 1,
+    AUTHENTICATION_ERROR: 2
+}
+
 const TDAEMON_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.transmission-daemon';
 const TDAEMON_HOST_KEY = 'host';
 const TDAEMON_PORT_KEY = 'port';
@@ -95,14 +101,16 @@ const TransmissionDaemonMonitor = new Lang.Class({
         let password = gsettings.get_string(TDAEMON_PASSWORD_KEY);
 
         if (retrying) {
-            transmissionDaemonIndicator.connectionError("Authentication failed");
+            transmissionDaemonIndicator.connectionError(ErrorType.AUTHENTICATION_ERROR,
+                                                        "Authentication failed");
             return;
         }
 
         if (user && password)
             auth.authenticate(user, password);
         else
-            transmissionDaemonIndicator.connectionError("Missing user or password");
+            transmissionDaemonIndicator.connectionError(ErrorType.AUTHENTICATION_ERROR,
+                                                        "Missing username or password");
     },
 
     changeInterval: function(interval) {
@@ -232,12 +240,16 @@ const TransmissionDaemonMonitor = new Lang.Class({
                     case 404:
                         error = "Can't access to %s".format(this._url);
                         break;
+                    case 401:
+                        // See this.authenticate
+                        break;
                     default:
                         error = "Can't connect to Transmission";
                         break;
                 }
                 if (error)
-                    transmissionDaemonIndicator.connectionError(error);
+                    transmissionDaemonIndicator.connectionError(ErrorType.CONNECTION_ERROR,
+                                                                error);
             }
             if (!this._timers.stats) {
                 this._timers.stats = Mainloop.timeout_add_seconds(
@@ -305,7 +317,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._torrents = {};
         this._monitor = transmissionDaemonMonitor;
         this._url = "";
-        this._enabled = false;
+        this._state = ErrorType.NO_ERROR;
         this._nb_torrents = 0;
         this._always_show = false;
 
@@ -341,7 +353,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     hide: function() {
-        this.actor.hide();
+        if (!this._always_show)
+            this.actor.hide();
     },
 
     show: function() {
@@ -355,7 +368,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._always_show = gsettings.get_boolean(TDAEMON_ALWAYS_SHOW_KEY);
         if (this._always_show)
             this.show();
-        else if (!this._enabled)
+        else if (this._state == ErrorType.CONNECTION_ERROR)
             this.hide();
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
@@ -371,21 +384,23 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._monitor.changeInterval(10);
     },
 
-    connectionError: function(error) {
-        if (!this._always_show)
+    connectionError: function(type, error) {
+        if (type == ErrorType.CONNECTION_ERROR)
             this.hide();
+        else
+            this.show();
+        this._state = type;
         this.removeTorrents();
         this._icon.icon_name = errorIcon;
         this._status.text = "";
         this.menu.controls.setInfo(error);
-        this._enabled = false;
         this.refreshControls(true);
     },
 
     connectionAvailable: function() {
-        if (!this._enabled) {
+        if (this._state != ErrorType.NO_ERROR) {
             this._icon.icon_name = enabledIcon;
-            this._enabled = true;
+            this._state = ErrorType.NO_ERROR;
             this.refreshControls(true);
             this.show();
         }
@@ -441,7 +456,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         if (state_changed)
             this.menu.controls.removeControls();
 
-        if (this._enabled) {
+        if (this._state == ErrorType.NO_ERROR) {
             this.menu.controls.addControl(this._web_btn);
             if (this._nb_torrents > 0) {
                 this.menu.controls.addControl(this._stop_btn);
