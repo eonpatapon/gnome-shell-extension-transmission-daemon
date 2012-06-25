@@ -307,7 +307,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._url = "";
         this._enabled = false;
         this._nb_torrents = 0;
-        this._always_show = gsettings.get_string(TDAEMON_ALWAYS_SHOW_KEY);
+        this._always_show = false;
 
         this._stop_btn = new Button('media-playback-pause', 'Pause all torrents',
                                     Lang.bind(this, this.stopAll));
@@ -331,11 +331,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
 
         this.setMenu(new TorrentsMenu(this.actor));
 
-        this.updateStatsOptions();
-        this.updateURL();
+        this.updateOptions();
         gsettings.connect("changed", Lang.bind(this, function() {
-            this.updateStatsOptions();
-            this.updateURL();
+            this.updateOptions();
             this.updateStats(true);
         }));
 
@@ -350,7 +348,15 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.actor.show();
     },
 
-    updateURL: function() {
+    updateOptions: function() {
+        this._status_show_torrents = gsettings.get_boolean(TDAEMON_STATS_NB_TORRENTS_KEY);
+        this._status_show_icons = gsettings.get_boolean(TDAEMON_STATS_ICONS_KEY);
+        this._status_show_numeric = gsettings.get_boolean(TDAEMON_STATS_NUMERIC_KEY);
+        this._always_show = gsettings.get_boolean(TDAEMON_ALWAYS_SHOW_KEY);
+        if (this._always_show)
+            this.show();
+        else if (!this._enabled)
+            this.hide();
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
@@ -384,12 +390,6 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this.show();
         }
         this.refreshControls(false);
-    },
-
-    updateStatsOptions: function() {
-        this._status_show_torrents = gsettings.get_boolean(TDAEMON_STATS_NB_TORRENTS_KEY);
-        this._status_show_icons = gsettings.get_boolean(TDAEMON_STATS_ICONS_KEY);
-        this._status_show_numeric = gsettings.get_boolean(TDAEMON_STATS_NUMERIC_KEY);
     },
 
     updateStats: function(dontChangeState) {
