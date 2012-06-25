@@ -33,6 +33,9 @@ const downArrow = decodeURIComponent(escape('↓')).toString()
 const enabledIcon = "transmission";
 const errorIcon = "dialog-warning";
 
+const Gettext = imports.gettext.domain('gnome-shell-extension-transmission-daemon');
+const _ = Gettext.gettext;
+
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Lib = Me.imports.lib;
 
@@ -102,7 +105,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
 
         if (retrying) {
             transmissionDaemonIndicator.connectionError(ErrorType.AUTHENTICATION_ERROR,
-                                                        "Authentication failed");
+                                                        _("Authentication failed"));
             return;
         }
 
@@ -110,7 +113,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
             auth.authenticate(user, password);
         else
             transmissionDaemonIndicator.connectionError(ErrorType.AUTHENTICATION_ERROR,
-                                                        "Missing username or password");
+                                                        _("Missing username or password"));
     },
 
     changeInterval: function(interval) {
@@ -206,13 +209,13 @@ const TransmissionDaemonMonitor = new Lang.Class({
                 let error;
                 switch(message.status_code) {
                     case 404:
-                        error = "Can't access to %s".format(this._url);
+                        error = _("Can't access to %s").format(this._url);
                         break;
                     case 401:
                         // See this.authenticate
                         break;
                     default:
-                        error = "Can't connect to Transmission";
+                        error = _("Can't connect to Transmission");
                         break;
                 }
                 if (error)
@@ -270,14 +273,15 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._always_show = false;
 
         this._stop_btn = new ControlButton('media-playback-pause',
-                                           'Pause all torrents',
+                                           _('Pause all torrents'),
                                            Lang.bind(this, this.stopAll));
         this._start_btn = new ControlButton('media-playback-start',
-                                            'Start all torrents',
+                                            _('Start all torrents'),
                                             Lang.bind(this, this.startAll));
         this._web_btn = new ControlButton('web-browser', 'Open Web UI',
                                           Lang.bind(this, this.launchWebUI));
-        this._pref_btn = new ControlButton('preferences-system', 'Preferences',
+        this._pref_btn = new ControlButton('preferences-system', 
+                                           _('Preferences'),
                                            Lang.bind(this, this.launchPrefs));
 
         this._indicatorBox = new St.BoxLayout();
@@ -393,7 +397,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                             readableSize(stats.uploadSpeed));
         }
         else {
-            info_text = "No torrent";
+            info_text = _("No torrent");
         }
 
         this.menu.controls.setInfo(info_text);
@@ -548,40 +552,40 @@ const TransmissionTorrent = new Lang.Class({
             case TransmissionStatus.CHECK_WAIT:
             case TransmissionStatus.CHECK:
                 if (this._params.isFinished) {
-                    this._infos.seeds = "Seeding complete";
-                    this._infos.size = "%s, uploaded %s (Ratio %s)".format(
+                    this._infos.seeds = _("Seeding complete");
+                    this._infos.size = _("%s, uploaded %s (Ratio %s)").format(
                                                 sizeWhenDone,
                                                 uploadedEver,
                                                 this._params.uploadRatio.toFixed(1));
                 }
                 else {
-                    this._infos.seeds = "Paused";
-                    this._infos.size = "%s of %s (%s)".format(currentSize,
-                                                              sizeWhenDone,
-                                                              percentDone);
+                    this._infos.seeds = _("Paused");
+                    this._infos.size = _("%s of %s (%s)").format(currentSize,
+                                                                 sizeWhenDone,
+                                                                 percentDone);
                 }
                 break;
             case TransmissionStatus.DOWNLOAD_WAIT:
             case TransmissionStatus.DOWNLOAD:
-                this._infos.seeds = "Downloading from %s of %s peers - %s %s/s %s %s/s".format(
+                this._infos.seeds = _("Downloading from %s of %s peers - %s %s/s %s %s/s").format(
                                             this._params.peersSendingToUs,
                                             this._params.peersConnected,
                                             downArrow,
                                             rateDownload,
                                             upArrow,
                                             rateUpload);
-                this._infos.size = "%s of %s (%s)".format(currentSize,
-                                                          sizeWhenDone,
-                                                          percentDone);
+                this._infos.size = _("%s of %s (%s)").format(currentSize,
+                                                             sizeWhenDone,
+                                                             percentDone);
                 break;
             case TransmissionStatus.SEED_WAIT:
             case TransmissionStatus.SEED:
-                this._infos.seeds = "Seeding to %s of %s peers - %s %s/s".format(
+                this._infos.seeds = _("Seeding to %s of %s peers - %s %s/s").format(
                                             this._params.peersGettingFromUs,
                                             this._params.peersConnected,
                                             upArrow,
                                             rateUpload);
-                this._infos.size = "%s, uploaded %s (Ratio %s)".format(
+                this._infos.size = _("%s, uploaded %s (Ratio %s)").format(
                                             sizeWhenDone,
                                             uploadedEver,
                                             this._params.uploadRatio.toFixed(1));
@@ -766,7 +770,7 @@ const TorrentsControls = new Lang.Class({
 
         this.box = new St.BoxLayout({vertical: false,
                                      style_class: 'torrents-controls'});
-        this.info = new St.Label({text: "Connecting..."});
+        this.info = new St.Label({text: _("Connecting...")});
         this._old_info = "";
         this.hover = false;
 
