@@ -11,17 +11,17 @@
     -uploaded-color: #36B22F;
     -idle-color: #888;
     -idle-border-color: #666;
-    padding: 2px 10px 0px 25px;
+    padding: 2px 0px 0px 25px;
 }
 
 .torrent-name {
     font-weight: bold;
-    padding: .5em 10px 3px 25px;
+    padding: .5em 25px 3px 25px;
 }
 
 .torrent-infos {
     font-size: 80%;
-    padding: 0 10px 0 25px;
+    padding: 0 25px 0 25px;
 }
 
 .size-info {
