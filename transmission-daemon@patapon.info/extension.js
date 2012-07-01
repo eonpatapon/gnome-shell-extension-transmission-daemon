@@ -591,6 +591,30 @@ const TransmissionTorrent = new Lang.Class({
 
     },
 
+    getStateString: function(state) {
+        switch(state) {
+            case TransmissionStatus.STOPPED:
+                if (this._params.isFinished)
+                    return _("Seeding complete");
+                else
+                    return _("Paused");
+            case TransmissionStatus.CHECK_WAIT:
+                return _("Queued for verification");
+            case TransmissionStatus.CHECK:
+                return _("Verifying local data");
+            case TransmissionStatus.DOWNLOAD_WAIT:
+                return _("Queued for download");
+            case TransmissionStatus.DOWNLOAD:
+                return _("Downloading");
+            case TransmissionStatus.SEED_WAIT:
+                return _("Queued for seeding");
+            case TransmissionStatus.SEED:
+                return _("Seeding");
+        }
+
+        return false;
+    },
+
     buildInfo: function() {
         let rateDownload = readableSize(this._params.rateDownload);
         let rateUpload = readableSize(this._params.rateUpload);
@@ -608,15 +632,14 @@ const TransmissionTorrent = new Lang.Class({
             case TransmissionStatus.STOPPED:
             case TransmissionStatus.CHECK_WAIT:
             case TransmissionStatus.CHECK:
+                this._infos.seeds = this.getStateString(this._params.status);
                 if (this._params.isFinished) {
-                    this._infos.seeds = _("Seeding complete");
                     this._infos.size = _("%s, uploaded %s (Ratio %s)").format(
                                                 sizeWhenDone,
                                                 uploadedEver,
                                                 this._params.uploadRatio.toFixed(1));
                 }
                 else {
-                    this._infos.seeds = _("Paused");
                     this._infos.size = _("%s of %s (%s)").format(currentSize,
                                                                  sizeWhenDone,
                                                                  percentDone);
@@ -624,24 +647,32 @@ const TransmissionTorrent = new Lang.Class({
                 break;
             case TransmissionStatus.DOWNLOAD_WAIT:
             case TransmissionStatus.DOWNLOAD:
-                this._infos.seeds = _("Downloading from %s of %s peers - %s %s/s %s %s/s").format(
-                                            this._params.peersSendingToUs,
-                                            this._params.peersConnected,
-                                            downArrow,
-                                            rateDownload,
-                                            upArrow,
-                                            rateUpload);
+                if (this._params.status == TransmissionStatus.DOWNLOAD)
+                    this._infos.seeds = _("Downloading from %s of %s peers - %s %s/s %s %s/s").format(
+                                                this._params.peersSendingToUs,
+                                                this._params.peersConnected,
+                                                downArrow,
+                                                rateDownload,
+                                                upArrow,
+                                                rateUpload);
+                else
+                    this._infos.seeds = this.getStateString(TransmissionStatus.DOWNLOAD_WAIT)
+
                 this._infos.size = _("%s of %s (%s)").format(currentSize,
                                                              sizeWhenDone,
                                                              percentDone);
                 break;
             case TransmissionStatus.SEED_WAIT:
             case TransmissionStatus.SEED:
-                this._infos.seeds = _("Seeding to %s of %s peers - %s %s/s").format(
-                                            this._params.peersGettingFromUs,
-                                            this._params.peersConnected,
-                                            upArrow,
-                                            rateUpload);
+                if (this._params.status == TransmissionStatus.SEED)
+                    this._infos.seeds = _("Seeding to %s of %s peers - %s %s/s").format(
+                                                this._params.peersGettingFromUs,
+                                                this._params.peersConnected,
+                                                upArrow,
+                                                rateUpload);
+                else
+                    this._infos.seeds = this.getStateString(TransmissionStatus.SEED_WAIT);
+
                 this._infos.size = _("%s, uploaded %s (Ratio %s)").format(
                                             sizeWhenDone,
                                             uploadedEver,
