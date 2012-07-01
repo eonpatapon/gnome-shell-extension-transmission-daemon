@@ -32,6 +32,7 @@ const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
 const enabledIcon = "transmission";
 const errorIcon = "transmission-error";
+const connectIcon = "transmission-connecting";
 
 const Gettext = imports.gettext.domain('gnome-shell-extension-transmission-daemon');
 const _ = Gettext.gettext;
@@ -52,7 +53,8 @@ const TransmissionStatus = {
 const ErrorType = {
     NO_ERROR: 0,
     CONNECTION_ERROR: 1,
-    AUTHENTICATION_ERROR: 2
+    AUTHENTICATION_ERROR: 2,
+    CONNECTING: 3
 }
 
 const TDAEMON_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.transmission-daemon';
@@ -268,7 +270,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._torrents = {};
         this._monitor = transmissionDaemonMonitor;
         this._url = "";
-        this._state = ErrorType.NO_ERROR;
+        this._state = ErrorType.CONNECTING;
         this._nb_torrents = 0;
         this._always_show = false;
 
@@ -285,7 +287,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                            Lang.bind(this, this.launchPrefs));
 
         this._indicatorBox = new St.BoxLayout();
-        this._icon = new St.Icon({icon_name: enabledIcon,
+        this._icon = new St.Icon({icon_name: connectIcon,
                                   style_class: 'system-status-icon'});
         this._status = new St.Label();
 
