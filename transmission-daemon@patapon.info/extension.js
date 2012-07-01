@@ -31,7 +31,7 @@ const Gio = imports.gi.Gio;
 const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
 const enabledIcon = "transmission";
-const errorIcon = "dialog-warning";
+const errorIcon = "transmission-error";
 
 const Gettext = imports.gettext.domain('gnome-shell-extension-transmission-daemon');
 const _ = Gettext.gettext;
@@ -280,7 +280,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                             Lang.bind(this, this.startAll));
         this._web_btn = new ControlButton('web-browser', 'Open Web UI',
                                           Lang.bind(this, this.launchWebUI));
-        this._pref_btn = new ControlButton('preferences-system', 
+        this._pref_btn = new ControlButton('preferences-system',
                                            _('Preferences'),
                                            Lang.bind(this, this.launchPrefs));
 
