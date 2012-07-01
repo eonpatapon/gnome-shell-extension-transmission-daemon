@@ -50,6 +50,13 @@ const TransmissionStatus = {
     SEED: 6
 }
 
+const TransmissionError = {
+    NONE: 0,
+    TRACKER_WARNING: 1,
+    TRACKER_ERROR: 2,
+    LOCAL_ERROR: 3
+}
+
 const ErrorType = {
     NO_ERROR: 0,
     CONNECTION_ERROR: 1,
@@ -569,11 +576,19 @@ const TransmissionTorrent = new Lang.Class({
         this._progress_bar.connect('repaint', Lang.bind(this, this._draw));
         this.addActor(this._progress_bar);
 
+        this._error_info = new PopupMenu.PopupMenuItem(this._infos.error,
+                                                       {reactive: false,
+                                                        style_class: 'torrent-infos error'});
+        this._error_info.actor.remove_style_class_name('popup-menu-item');
+        this.addMenuItem(this._error_info);
+        this._error_info.actor.hide();
+
         this._size_info = new PopupMenu.PopupMenuItem(this._infos.size,
                                                       {reactive: false,
                                                        style_class: 'torrent-infos size-info'});
         this._size_info.actor.remove_style_class_name('popup-menu-item');
         this.addMenuItem(this._size_info);
+
     },
 
     buildInfo: function() {
@@ -587,6 +602,7 @@ const TransmissionTorrent = new Lang.Class({
 
         this._infos.seeds = "";
         this._infos.size = "";
+        this._infos.error = "";
 
         switch(this._params.status) {
             case TransmissionStatus.STOPPED:
@@ -634,8 +650,18 @@ const TransmissionTorrent = new Lang.Class({
         }
 
         if (this._params.error && this._params.errorString) {
+            switch(this._params.error) {
+                case TransmissionError.TRACKER_WARNING:
+                    this._infos.error = _("Tracker returned a warning: %s").format(this._params.errorString);
+                    break;
+                case TransmissionError.TRACKER_ERROR:
+                    this._infos.error = _("Tracker returned an error: %s").format(this._params.errorString);
+                    break;
+                case TransmissionError.LOCAL_ERROR:
+                    this._infos.error = _("Error: %s").format(this._params.errorString);
+                    break;
+            }
             this._error = true;
-            this._infos.seeds = this._params.errorString;
         }
         else
             this._error = false;
@@ -723,10 +749,12 @@ const TransmissionTorrent = new Lang.Class({
         this._params = params;
         this.buildInfo();
         this._seeds_info.label.text = this._infos.seeds;
-        if (this._error)
-            this._seeds_info.label.add_style_class_name("error");
+        if (this._error) {
+            this._error_info.label.text = this._infos.error;
+            this._error_info.actor.show();
+        }
         else
-            this._seeds_info.label.remove_style_class_name("error");
+            this._error_info.actor.hide();
         this._size_info.label.text = this._infos.size;
         this._progress_bar.queue_repaint();
         this._name.update(this._params);
