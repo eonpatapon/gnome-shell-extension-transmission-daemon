@@ -187,6 +187,16 @@ const TransmissionDaemonMonitor = new Lang.Class({
         this.sendPost(params, this.onTorrentAction);
     },
 
+    torrentAdd: function(url) {
+        let params = {
+            method: "torrent-add",
+            arguments: {
+                filename: url
+            }
+        };
+        this.sendPost(params, this.onTorrentAdd);
+    },
+
     processList: function(session, message) {
         if (message.status_code == "200") {
             //log(message.response_body.data);
@@ -244,6 +254,14 @@ const TransmissionDaemonMonitor = new Lang.Class({
             log(message.response_body.data);
     },
 
+    onTorrentAdd: function(session, message) {
+        let result = JSON.parse(message.response_body.data);
+        let added = false;
+        if (result.arguments['torrent-added'])
+            added = true;
+        transmissionDaemonIndicator.torrentAdded(added);
+    },
+
     getList: function() {
         return this._torrents;
     },
@@ -296,6 +314,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._pref_btn = new ControlButton('preferences-system',
                                            _('Preferences'),
                                            Lang.bind(this, this.launchPrefs));
+        this._add_btn = new ControlButton('list-add',
+                                           _('Add torrent'),
+                                           Lang.bind(this, this.toggleAddEntry));
 
         this._indicatorBox = new St.BoxLayout();
         this._icon = new St.Icon({icon_name: connectIcon,
@@ -349,6 +370,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._monitor.changeInterval(2);
         else
             this._monitor.changeInterval(10);
+    },
+
+    torrentAdded: function(added) {
+        this.menu.controls.torrentAdded(added);
     },
 
     connectionError: function(type, error) {
@@ -457,6 +482,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                 this.menu.controls.addControl(this._web_btn, 0);
             else
                 this.menu.controls.addControl(this._client_btn, 0);
+            this.menu.controls.addControl(this._add_btn);
             if (this._nb_torrents > 0) {
                 this.menu.controls.addControl(this._stop_btn);
                 this.menu.controls.addControl(this._start_btn);
@@ -502,6 +528,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
         app.launch(global.display.get_current_time_roundtrip(),
                    ['extension:///transmission-daemon@patapon.info'], -1, null);
         this.menu.close();
+    },
+
+    toggleAddEntry: function() {
+        this.menu.controls.toggleAddEntry(this._add_btn);
     },
 
     updateList: function() {
@@ -873,47 +903,116 @@ const TorrentsControls = new Lang.Class({
     _init: function () {
         this.parent({reactive: false});
 
-        this.box = new St.BoxLayout({vertical: false,
-                                     style_class: 'torrents-controls'});
-        this.info = new St.Label({text: _("Connecting...")});
         this._old_info = "";
         this.hover = false;
 
-        this.addActor(this.box);
-        this.addActor(this.info, {span: -1, align: St.Align.END});
+        this.vbox = new St.BoxLayout({vertical: true,
+                                      style_class: 'torrents-controls-vbox'});
+
+        this.ctrl_box = new St.BoxLayout({vertical: false});
+
+        this.ctrl_btns = new St.BoxLayout({vertical: false,
+                                           style_class: 'torrents-controls'});
+        this.ctrl_info = new St.Label({text: _("Connecting...")});
+
+
+        this.add_box = new St.BoxLayout({vertical: false,
+                                         style_class: 'torrents-add'});
+        this.add_box_btn = false;
+        this.add_entry = new St.Entry({style_class: 'add-entry',
+                                       hint_text: _("Torrent URL or Magnet link"),
+                                       can_focus: true});
+        this.add_btn = new ControlButton("object-select", "",
+                                         Lang.bind(this, this.torrentAdd));
+        this.add_box.hide();
+
+        this.ctrl_box.add(this.ctrl_btns);
+        this.ctrl_box.add(this.ctrl_info, {expand: true,
+                                           x_fill: false,
+                                           y_fill: false,
+                                           x_align: St.Align.END});
+
+        this.add_box.add(this.add_entry, {expand: true});
+        this.add_box.add(this.add_btn);
+
+        this.vbox.add(this.ctrl_box, {expand: true, span: -1});
+        this.vbox.add(this.add_box, {expand: true, span: -1});
+
+        this.addActor(this.vbox, {expand: true, span: -1});
     },
 
     setInfo: function(text) {
         if (!this.hover)
-            this.info.text = text;
+            this.ctrl_info.text = text;
+    },
+
+    toggleAddEntry: function(button) {
+        this.add_box_btn = button;
+        if (this.add_box.visible)
+            this.hideAddEntry();
+        else {
+            this.add_box.show();
+            let [min_width, pref_width] = this.add_entry.get_preferred_width(-1);
+            this.add_entry.width = pref_width;
+            this.add_box_btn.add_style_pseudo_class('active');
+        }
+    },
+
+    hideAddEntry: function() {
+        transmissionDaemonIndicator.menu.actor.grab_key_focus();
+        this.add_entry.text = "";
+        this.add_entry.remove_style_pseudo_class('error');
+        this.add_entry.remove_style_pseudo_class('inactive');
+        this.add_box.hide();
+        this.add_box_btn.remove_style_pseudo_class('active');
+    },
+
+    torrentAdd: function() {
+        let url = this.add_entry.text;
+        if (url.match(/^http/) || url.match(/^magnet:/)) {
+            this.add_entry.add_style_pseudo_class('inactive');
+            transmissionDaemonMonitor.torrentAdd(url);
+        }
+        else {
+            this.torrentAdded(false);
+        }
+    },
+
+    torrentAdded: function(added) {
+        if (added)
+            this.hideAddEntry();
+        else {
+            this.add_entry.remove_style_pseudo_class('inactive');
+            this.add_entry.add_style_pseudo_class('error');
+        }
     },
 
     addControl: function(button, position) {
-        if (!this.box.contains(button)) {
+        if (!this.ctrl_btns.contains(button)) {
             if (position)
-                this.box.insert_child_at_index(button, position);
+                this.ctrl_btns.insert_child_at_index(button, position);
             else
-                this.box.add_actor(button);
+                this.ctrl_btns.add_actor(button);
             button.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
-                    if (button._info != this.info.text)
-                        this._old_info = this.info.text;
-                    this.info.text = button._info;
+                    if (button._info != this.ctrl_info.text)
+                        this._old_info = this.ctrl_info.text;
+                    this.ctrl_info.text = button._info;
                 }
                 else
-                    this.info.text = this._old_info;
+                    this.ctrl_info.text = this._old_info;
             }));
         }
     },
 
     removeControl: function(button, name) {
-        if (this.box.contains(button))
-            this.box.remove_actor(button);
+        if (this.ctrl_btns.contains(button))
+            this.ctrl_btns.remove_actor(button);
     },
 
     removeControls: function() {
-        this.box.get_children().forEach(Lang.bind(this, function(b) {
+        this.ctrl_btns.get_children().forEach(Lang.bind(this, function(b) {
             this.removeControl(b);
         }));
     }
@@ -1005,6 +1104,11 @@ const TorrentsMenu = new Lang.Class({
         else {
             this.parent(menuItem, position);
         }
+    },
+
+    close: function(animate) {
+        this.parent(animate);
+        this.controls.hideAddEntry();
     }
 });
 

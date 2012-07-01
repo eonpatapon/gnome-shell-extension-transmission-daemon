@@ -36,6 +36,63 @@
     spacing: 3px;
 }
 
+.add-entry {
+    padding: 4px;
+    border-radius: 4px;
+    color: #a8a8a8;
+    selected-color: black;
+    border: 1px solid rgba(245,245,245,0.2);
+    background-gradient-direction: vertical;
+    background-gradient-start: rgb(200,200,200);
+    background-gradient-end: white;
+    transition-duration: 300;
+    box-shadow: inset 0px 2px 4px rgba(0,0,0,0.6);
+
+    caret-color: #a8a8a8;
+    caret-size: 1px;
+}
+
+.add-entry:focus {
+    border: 1px solid #8b8b8b;
+    color: #333333;
+    background-gradient-direction: vertical;
+    background-gradient-start: rgb(200,200,200);
+    background-gradient-end: white;
+
+    caret-color: #545454;
+    selection-background-color: #808080;
+}
+
+.add-entry:error {
+    border: 1px solid red;
+    color: #333333;
+    background-gradient-direction: vertical;
+    background-gradient-start: #FFD4D4;
+    background-gradient-end: white;
+
+    caret-color: #545454;
+    selection-background-color: #808080;
+}
+
+.add-entry:inactive {
+    border: 1px solid #8b8b8b;
+    color: #555;
+    background-gradient-direction: vertical;
+    background-gradient-start: rgb(140,140,140);
+    background-gradient-end: rgb(230,230,230);
+
+    caret-color: #545454;
+    selection-background-color: #808080;
+}
+
+.torrents-controls-vbox {
+    spacing: 10px;
+}
+
+.torrents-add {
+    spacing: 5px;
+}
+
 .error {
     color: red;
 }
