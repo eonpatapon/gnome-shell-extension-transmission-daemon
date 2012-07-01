@@ -410,14 +410,18 @@ const TransmissionDaemonIndicator = new Lang.Class({
             stats_text += stats.torrentCount;
 
         if (stats.downloadSpeed > 10000) {
+            if (stats_text && this._status_show_icons)
+                stats_text += " ";
             if (this._status_show_icons)
-                stats_text += " %s".format(downArrow);
+                stats_text += downArrow;
             if (this._status_show_numeric)
                 stats_text += " %s/s".format(readableSize(stats.downloadSpeed));
         }
         if (stats.uploadSpeed > 2000) {
+            if (this._status_show_icons && this._status_show_numeric)
+                stats_text += " ";
             if (this._status_show_icons)
-                stats_text += " %s".format(upArrow);
+                stats_text += upArrow;
             if (this._status_show_numeric)
                 stats_text += " %s/s".format(readableSize(stats.uploadSpeed));
         }

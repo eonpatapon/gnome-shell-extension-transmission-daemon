@@ -1,7 +1,7 @@
 {
-"shell-version": ["3.4"], 
-"uuid": "transmission-daemon@patapon.info", 
-"name": "Transmission Daemon Indicator", 
+"shell-version": ["3.4"],
+"uuid": "transmission-daemon@patapon.info",
+"name": "Transmission Daemon Indicator",
 "url": "https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon",
-"description": "Monitor transmission-daemon"
+"description": "Monitor transmission-daemon or transmission-gtk. Checkout the homepage for more details."
 }
