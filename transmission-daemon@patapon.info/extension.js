@@ -269,7 +269,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
 
         this._torrents = {};
         this._monitor = transmissionDaemonMonitor;
+        this._host = "";
         this._url = "";
+        this._server_type = "daemon";
         this._state = ErrorType.CONNECTING;
         this._nb_torrents = 0;
         this._always_show = false;
@@ -282,6 +284,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                             Lang.bind(this, this.startAll));
         this._web_btn = new ControlButton('web-browser', 'Open Web UI',
                                           Lang.bind(this, this.launchWebUI));
+        this._client_btn = new ControlButton('transmission', 'Open Transmission',
+                                             Lang.bind(this, this.launchClient));
         this._pref_btn = new ControlButton('preferences-system',
                                            _('Preferences'),
                                            Lang.bind(this, this.launchPrefs));
@@ -326,10 +330,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this.show();
         else if (this._state == ErrorType.CONNECTION_ERROR)
             this.hide();
-        let host = gsettings.get_string(TDAEMON_HOST_KEY);
+        this._host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-        this._url = 'http://%s:%s%sweb/'.format(host, port.toString(), rpc_url);
+        this._url = 'http://%s:%s%sweb/'.format(this._host, port.toString(), rpc_url);
     },
 
     _onOpenStateChanged: function(menu, open) {
@@ -357,10 +361,35 @@ const TransmissionDaemonIndicator = new Lang.Class({
         if (this._state != ErrorType.NO_ERROR) {
             this._icon.icon_name = enabledIcon;
             this._state = ErrorType.NO_ERROR;
-            this.refreshControls(true);
+            this.checkServer();
             this.show();
         }
-        this.refreshControls(false);
+        else
+            this.refreshControls(false);
+    },
+
+    checkServer: function() {
+        const DBusIface = <interface name="org.freedesktop.DBus">
+        <method name="ListNames">
+            <arg type="as" direction="out" />
+        </method>
+        </interface>;
+        const DBusProxy = Gio.DBusProxy.makeProxyWrapper(DBusIface);
+        let proxy = new DBusProxy(Gio.DBus.session, 'org.freedesktop.DBus',
+                                  '/org/freedesktop/DBus');
+        proxy.ListNamesRemote(Lang.bind(this, function(names) {
+            this._server_type = "daemon";
+            for (n in names[0]) {
+                let name = names[0][n];
+                if (name.search('com.transmissionbt.transmission') > -1
+                   && (this._host == "localhost" || this._host == "127.0.0.1")) {
+                    this._server_type = "client";
+                    break;
+                }
+            }
+            this.refreshControls(true);
+        }));
+
     },
 
     updateStats: function(dontChangeState) {
@@ -413,7 +442,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this.menu.controls.removeControls();
 
         if (this._state == ErrorType.NO_ERROR) {
-            this.menu.controls.addControl(this._web_btn);
+            if (this._server_type == "daemon")
+                this.menu.controls.addControl(this._web_btn, 0);
+            else
+                this.menu.controls.addControl(this._client_btn, 0);
             if (this._nb_torrents > 0) {
                 this.menu.controls.addControl(this._stop_btn);
                 this.menu.controls.addControl(this._start_btn);
@@ -443,6 +475,13 @@ const TransmissionDaemonIndicator = new Lang.Class({
         );
         app.launch(global.display.get_current_time_roundtrip(),
                    [this._url], -1, null);
+        this.menu.close();
+    },
+
+    launchClient: function() {
+        let appSys = Shell.AppSystem.get_default();
+        let app = appSys.lookup_app('transmission-gtk.desktop');
+        app.activate_full(-1, 0);
         this.menu.close();
     },
 
@@ -785,9 +824,12 @@ const TorrentsControls = new Lang.Class({
             this.info.text = text;
     },
 
-    addControl: function(button, name) {
+    addControl: function(button, position) {
         if (!this.box.contains(button)) {
-            this.box.add_actor(button);
+            if (position)
+                this.box.insert_child_at_index(button, position);
+            else
+                this.box.add_actor(button);
             button.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
