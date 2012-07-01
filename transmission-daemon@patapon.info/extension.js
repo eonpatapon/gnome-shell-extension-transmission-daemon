@@ -752,6 +752,7 @@ const TorrentName = new Lang.Class({
                                      style_class: 'torrent-controls'});
 
         let name_label = new St.Label({text: params.name});
+        name_label.set_style('max-width: 400px');
 
         this.addActor(name_label);
         this.addActor(this.box, {span: -1, align: St.Align.END});
