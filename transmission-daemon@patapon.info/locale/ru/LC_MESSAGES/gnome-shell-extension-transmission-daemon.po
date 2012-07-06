@@ -1,0 +1,131 @@
+# Russian translations for gnome-shell-extension-transmission-daemon package
+# Английские переводы для пакета gnome-shell-extension-transmission-daemon.
+# Copyright (C) 2012 THE gnome-shell-extension-transmission-daemon'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-shell-extension-transmission-daemon package.
+# Shabardin Pavel <bigbn@mail.ru>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-06 11:35+0400\n"
+"PO-Revision-Date: 2012-07-06 12:10+0400\n"
+"Last-Translator: bigbn <bigbn@mail.ru>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: extension.js:117
+msgid "Authentication failed"
+msgstr "Аутентификация не удалась"
+
+#: extension.js:125
+msgid "Missing username or password"
+msgstr "Отсутствует имя пользователя или пароль"
+
+#: extension.js:231
+#, perl-format
+msgid "Can't access to %s"
+msgstr "Нет доступа к %s"
+
+#: extension.js:237
+msgid "Can't connect to Transmission"
+msgstr "Не удается подключиться к демону Transmision"
+
+#: extension.js:305
+msgid "Pause all torrents"
+msgstr "Приостановить все торренты"
+
+#: extension.js:308
+msgid "Start all torrents"
+msgstr "Запустить все торренты"
+
+#: extension.js:315
+msgid "Preferences"
+msgstr "Параметры"
+
+msgid "Open Web UI"
+msgstr "Открыть Web-интерфейс"
+
+msgid "Open Transmission"
+msgstr "Открыть Transmission"
+
+#: extension.js:318
+msgid "Add torrent"
+msgstr "Добавить торрент"
+
+#: extension.js:467
+msgid "No torrent"
+msgstr "Торренты отсутсвуют"
+
+#: extension.js:632
+msgid "Seeding complete"
+msgstr "Раздача заверешена"
+
+#: extension.js:634
+msgid "Paused"
+msgstr "Приостановлено"
+
+#: extension.js:636
+msgid "Queued for verification"
+msgstr "В очереди на проверку"
+
+#: extension.js:638
+msgid "Verifying local data"
+msgstr "Проверка локальных данных"
+
+#: extension.js:640
+msgid "Queued for download"
+msgstr "В очереди на загрузку"
+
+#: extension.js:642
+msgid "Downloading"
+msgstr "Загружается"
+
+#: extension.js:644
+msgid "Queued for seeding"
+msgstr "В очереди на раздачу"
+
+#: extension.js:646
+msgid "Seeding"
+msgstr "Разадача"
+
+#: extension.js:702
+#, perl-format
+msgid "Seeding to %s of %s peers - %s %s/s"
+msgstr "Раздача для %s из %s пиров - %s %s/s"
+
+msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
+msgstr "Загрузка от %s из %s пиров - %s %s/s %s %s/s"
+
+#: extension.js:710
+#, perl-format
+msgid "%s, uploaded %s (Ratio %s)"
+msgstr "%s, роздано %s (%s)"
+
+#: extension.js:720
+#, perl-format
+msgid "Tracker returned a warning: %s"
+msgstr "Трекер вернул предупреждение: %s"
+
+#: extension.js:723
+#, perl-format
+msgid "Tracker returned an error: %s"
+msgstr "Трекер вернул ошибку: %s"
+
+#: extension.js:726
+#, perl-format
+msgid "Error: %s"
+msgstr "Ошибка: %s"
+
+#: extension.js:916
+msgid "Connecting..."
+msgstr "Подключение..."
+
+#: extension.js:923
+msgid "Torrent URL or Magnet link"
+msgstr "Ссылка на торрент или magnet-ссылка"
