@@ -34,7 +34,11 @@ const enabledIcon = "transmission";
 const errorIcon = "transmission-error";
 const connectIcon = "transmission-connecting";
 
-const Gettext = imports.gettext.domain('gnome-shell-extension-transmission-daemon');
+const ExtensionUtils = imports.misc.extensionUtils;
+const Gettext = imports.gettext;
+
+Gettext.textdomain("gnome-shell-extension-transmission-daemon");
+Gettext.bindtextdomain("gnome-shell-extension-transmission-daemon", ExtensionUtils.getCurrentExtension().dir.get_child('locale').get_path());
 const _ = Gettext.gettext;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -307,9 +311,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._start_btn = new ControlButton('media-playback-start',
                                             _('Start all torrents'),
                                             Lang.bind(this, this.startAll));
-        this._web_btn = new ControlButton('web-browser', 'Open Web UI',
+        this._web_btn = new ControlButton('web-browser', _('Open Web UI'),
                                           Lang.bind(this, this.launchWebUI));
-        this._client_btn = new ControlButton('transmission', 'Open Transmission',
+        this._client_btn = new ControlButton('transmission', _('Open Transmission'),
                                              Lang.bind(this, this.launchClient));
         this._pref_btn = new ControlButton('preferences-system',
                                            _('Preferences'),
