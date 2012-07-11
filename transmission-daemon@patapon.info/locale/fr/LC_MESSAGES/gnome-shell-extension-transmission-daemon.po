@@ -1,0 +1,131 @@
+# French translations for gnome-shell-extension-transmission-daemon package
+# Traduction française pour gnome-shell-extension-transmission-daemon.
+# Copyright (C) 2012 THE gnome-shell-extension-transmission-daemon'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-shell-extension-transmission-daemon package.
+# Christophe Meyer <stombi@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-shell-extension-transmission-daemon\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-06 11:35+0400\n"
+"PO-Revision-Date: 2012-07-10 21:09+0100\n"
+"Last-Translator: Christophe Meyer <stombi@gmail.com>\n"
+"Language-Team: French\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1)\n"
+
+#: extension.js:117
+msgid "Authentication failed"
+msgstr "L'autentification à échoué"
+
+#: extension.js:125
+msgid "Missing username or password"
+msgstr "Identifiant ou mot de passe manquant"
+
+#: extension.js:231
+#, perl-format
+msgid "Can't access to %s"
+msgstr "Ne peut pas acceder à %s"
+
+#: extension.js:237
+msgid "Can't connect to Transmission"
+msgstr "Ne peut pas se connecter à Transmission"
+
+#: extension.js:305
+msgid "Pause all torrents"
+msgstr "Mettre tous les torrents en pause"
+
+#: extension.js:308
+msgid "Start all torrents"
+msgstr "Démarrer tous les torrents"
+
+#: extension.js:315
+msgid "Preferences"
+msgstr "Préférences"
+
+msgid "Open Web UI"
+msgstr "Ouvrir l'interface Web"
+
+msgid "Open Transmission"
+msgstr "Ouvrir Transmission"
+
+#: extension.js:318
+msgid "Add torrent"
+msgstr "Ajouter un torrent"
+
+#: extension.js:467
+msgid "No torrent"
+msgstr "Aucun torrent"
+
+#: extension.js:632
+msgid "Seeding complete"
+msgstr "Seeding terminé"
+
+#: extension.js:634
+msgid "Paused"
+msgstr "En pause"
+
+#: extension.js:636
+msgid "Queued for verification"
+msgstr "En attente de vérification"
+
+#: extension.js:638
+msgid "Verifying local data"
+msgstr "Vérification des données locales"
+
+#: extension.js:640
+msgid "Queued for download"
+msgstr "En attente de téléchargement"
+
+#: extension.js:642
+msgid "Downloading"
+msgstr "Téléchargement"
+
+#: extension.js:644
+msgid "Queued for seeding"
+msgstr "En attente de seeding"
+
+#: extension.js:646
+msgid "Seeding"
+msgstr "Seeding"
+
+#: extension.js:702
+#, perl-format
+msgid "Seeding to %s of %s peers - %s %s/s"
+msgstr "Seeding à %s sur %s pairs - %s %s/s"
+
+msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
+msgstr "Télécharge depuis %s sur %s pairs - %s %s/s %s %s/s"
+
+#: extension.js:710
+#, perl-format
+msgid "%s, uploaded %s (Ratio %s)"
+msgstr "%s, envoyé %s (Ratio %s)"
+
+#: extension.js:720
+#, perl-format
+msgid "Tracker returned a warning: %s"
+msgstr "Le tracker a renvoyé un avertissement: %s"
+
+#: extension.js:723
+#, perl-format
+msgid "Tracker returned an error: %s"
+msgstr "Le tracker a renvoyé une erreur: %s"
+
+#: extension.js:726
+#, perl-format
+msgid "Error: %s"
+msgstr "Erreur: %s"
+
+#: extension.js:916
+msgid "Connecting..."
+msgstr "Connexion..."
+
+#: extension.js:923
+msgid "Torrent URL or Magnet link"
+msgstr "URL du fichier torrent ou lien magnet"
+
