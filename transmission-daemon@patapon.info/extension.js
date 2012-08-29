@@ -970,8 +970,9 @@ const TorrentsControls = new Lang.Class({
         this.add_entry.text = "";
         this.add_entry.remove_style_pseudo_class('error');
         this.add_entry.remove_style_pseudo_class('inactive');
+        if (this.add_box_btn)
+            this.add_box_btn.remove_style_pseudo_class('active');
         this.add_box.hide();
-        this.add_box_btn.remove_style_pseudo_class('active');
     },
 
     torrentAdd: function() {
