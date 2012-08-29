@@ -68,6 +68,15 @@ const ErrorType = {
     CONNECTING: 3
 }
 
+const StatusFilter = {
+    ALL: 0,
+    ACTIVE: 1,
+    DOWNLOADING: 2,
+    SEEDING: 3,
+    PAUSED: 4,
+    FINISHED: 5
+}
+
 const TDAEMON_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.transmission-daemon';
 const TDAEMON_HOST_KEY = 'host';
 const TDAEMON_PORT_KEY = 'port';
@@ -835,6 +844,14 @@ const TransmissionTorrent = new Lang.Class({
     toString: function() {
         return "[object TransmissionTorrent <%s>]".format(this._params.name);
     },
+
+    hide: function() {
+        this.actor.hide();
+    },
+
+    show: function() {
+        this.actor.show();
+    }
 });
 
 const TorrentName = new Lang.Class({
@@ -1063,6 +1080,80 @@ const ControlButton = new Lang.Class({
     }
 });
 
+const TorrentsFilters = new Lang.Class({
+    Name: 'TorrentsFilters',
+    Extends: PopupMenu.PopupComboBoxMenuItem,
+
+    _init: function() {
+        this.parent({style_class: 'torrents-filter-state'});
+
+        let item;
+        item = new PopupMenu.PopupMenuItem(_("All"));
+        this.addMenuItem(item, StatusFilter.ALL);
+        item = new PopupMenu.PopupMenuItem(_("Active"));
+        this.addMenuItem(item, StatusFilter.ACTIVE);
+        item = new PopupMenu.PopupMenuItem(_("Downloading"));
+        this.addMenuItem(item, StatusFilter.DOWNLOADING);
+        item = new PopupMenu.PopupMenuItem(_("Seeding"));
+        this.addMenuItem(item, StatusFilter.SEEDING);
+        item = new PopupMenu.PopupMenuItem(_("Paused"));
+        this.addMenuItem(item, StatusFilter.PAUSED);
+        item = new PopupMenu.PopupMenuItem(_("Finished"));
+        this.addMenuItem(item, StatusFilter.FINISHED);
+
+        this.setActiveItem(StatusFilter.ALL);
+        this.setSensitive(6);
+
+        this.connect('active-item-changed',
+                     Lang.bind(this, this.filterByState));
+    },
+
+    filterByState: function(menuItem, filterId) {
+        for (let id in transmissionDaemonIndicator._torrents) {
+            let torrent = transmissionDaemonIndicator._torrents[id];
+            log(JSON.stringify(torrent._params));
+            log(filterId);
+            switch (filterId) {
+                case StatusFilter.ALL:
+                    torrent.show();
+                    break;
+                case StatusFilter.ACTIVE:
+                    if (torrent._params.status != TransmissionStatus.STOPPED)
+                        torrent.show();
+                    else
+                        torrent.hide();
+                    break;
+                case StatusFilter.DOWNLOADING:
+                    if (torrent._params.status == TransmissionStatus.DOWNLOAD)
+                        torrent.show();
+                    else
+                        torrent.hide();
+                    break;
+                case StatusFilter.SEEDING:
+                    if (torrent._params.status == TransmissionStatus.SEED)
+                        torrent.show();
+                    else
+                        torrent.hide();
+                    break;
+                case StatusFilter.PAUSED:
+                    if (torrent._params.status == TransmissionStatus.STOPPED &&
+                        !torrent._params.isFinished)
+                        torrent.show();
+                    else
+                        torrent.hide();
+                    break;
+                case StatusFilter.FINISHED:
+                    if (torrent._params.status == TransmissionStatus.STOPPED &&
+                        torrent._params.isFinished)
+                        torrent.show();
+                    else
+                        torrent.hide();
+                    break;
+            }
+        }
+    },
+});
+
 const TorrentsMenu = new Lang.Class({
     Name: 'TorrentsMenu',
     Extends: PopupMenu.PopupMenu,
@@ -1074,6 +1165,7 @@ const TorrentsMenu = new Lang.Class({
         this._boxWrapper.set_style('min-width: 400px');
 
         this.controls = new TorrentsControls();
+        this.filters = new TorrentsFilters();
 
         this._scroll = new St.ScrollView({style_class: 'vfade popup-sub-menu torrents-list',
                                           hscrollbar_policy: Gtk.PolicyType.NEVER,
@@ -1082,6 +1174,7 @@ const TorrentsMenu = new Lang.Class({
         this._scroll.add_actor(this._scrollBox);
 
         this.addMenuItem(this.controls);
+        this.addMenuItem(this.filters);
         this.box.add(this._scroll);
 
         let vscroll = this._scroll.get_vscroll_bar();
