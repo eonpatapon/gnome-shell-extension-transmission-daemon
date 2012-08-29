@@ -3,6 +3,7 @@
 # Copyright (C) 2012 THE gnome-shell-extension-transmission-daemon'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-shell-extension-transmission-daemon package.
 # Christophe Meyer <stombi@gmail.com>, 2012.
+# Jean-Philippe Braun <eon@patapon.info>, 2012.
 #
 msgid ""
 msgstr ""
@@ -83,7 +84,7 @@ msgstr "En attente de téléchargement"
 
 #: extension.js:642
 msgid "Downloading"
-msgstr "Téléchargement"
+msgstr "En téléchargement"
 
 #: extension.js:644
 msgid "Queued for seeding"
@@ -91,7 +92,7 @@ msgstr "En attente de seeding"
 
 #: extension.js:646
 msgid "Seeding"
-msgstr "Seeding"
+msgstr "En seeding"
 
 #: extension.js:702
 #, perl-format
@@ -129,3 +130,11 @@ msgstr "Connexion..."
 msgid "Torrent URL or Magnet link"
 msgstr "URL du fichier torrent ou lien magnet"
 
+msgid "Active"
+msgstr "Actifs"
+
+msgid "All"
+msgstr "Tous"
+
+msgid "Finished"
+msgstr "Terminés"
