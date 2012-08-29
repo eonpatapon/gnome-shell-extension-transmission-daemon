@@ -165,6 +165,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
                          "uploadRatio"]
             }
         };
+        if (this._torrents != false)
+            params.arguments.ids = "recently-active";
         this.sendPost(params, this.processList);
         if (this._timers.list)
             delete this._timers.list
@@ -206,7 +208,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
             //log(message.response_body.data);
             let response = JSON.parse(message.response_body.data);
             this._torrents = response.arguments.torrents;
-            transmissionDaemonIndicator.updateList();
+            let to_remove = response.arguments.removed;
+            transmissionDaemonIndicator.updateList(to_remove);
             if (!this._timers.list) {
                 this._timers.list = Mainloop.timeout_add_seconds(
                                         this._interval,
@@ -538,18 +541,16 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.menu.controls.toggleAddEntry(this._add_btn);
     },
 
-    updateList: function() {
+    updateList: function(to_remove) {
         // Remove old torrents
-        this.cleanTorrents();
+        this.cleanTorrents(to_remove);
         // Update all torrents properties
         this.updateTorrents();
     },
 
-    cleanTorrents: function() {
-        for (let id in this._torrents) {
-            if (!this._monitor.getTorrentById(id))
-                this.removeTorrent(id);
-        }
+    cleanTorrents: function(to_remove) {
+        for (let id in to_remove)
+            this.removeTorrent(to_remove[id]);
     },
 
     removeTorrents: function() {
@@ -558,8 +559,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     removeTorrent: function(id) {
-        this._torrents[id].destroy();
-        delete this._torrents[id];
+        if (this._torrents[id]) {
+            this._torrents[id].destroy();
+            delete this._torrents[id];
+        }
     },
 
     updateTorrents: function() {
