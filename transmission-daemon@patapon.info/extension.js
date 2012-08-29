@@ -590,6 +590,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
     addTorrent: function(torrent) {
         this._torrents[torrent.id] = new TransmissionTorrent(torrent);
         this.menu.addMenuItem(this._torrents[torrent.id]);
+        this.menu.filters.filterByState();
     },
 
     toString: function() {
@@ -1108,12 +1109,10 @@ const TorrentsFilters = new Lang.Class({
                      Lang.bind(this, this.filterByState));
     },
 
-    filterByState: function(menuItem, filterId) {
+    filterByState: function() {
         for (let id in transmissionDaemonIndicator._torrents) {
             let torrent = transmissionDaemonIndicator._torrents[id];
-            log(JSON.stringify(torrent._params));
-            log(filterId);
-            switch (filterId) {
+            switch (this._activeItemPos) {
                 case StatusFilter.ALL:
                     torrent.show();
                     break;
