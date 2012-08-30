@@ -87,6 +87,7 @@ const TDAEMON_STATS_NB_TORRENTS_KEY = 'stats-torrents';
 const TDAEMON_STATS_ICONS_KEY = 'stats-icons';
 const TDAEMON_STATS_NUMERIC_KEY = 'stats-numeric';
 const TDAEMON_ALWAYS_SHOW_KEY = 'always-show';
+const TDAEMON_LATEST_FILTER = 'latest-filter';
 
 if (!_httpSession) {
     const _httpSession = new Soup.SessionAsync();
@@ -1102,7 +1103,7 @@ const TorrentsFilters = new Lang.Class({
         item = new PopupMenu.PopupMenuItem(_("Finished"));
         this.addMenuItem(item, StatusFilter.FINISHED);
 
-        this.setActiveItem(StatusFilter.ALL);
+        this.setActiveItem(gsettings.get_int(TDAEMON_LATEST_FILTER));
         this.setSensitive(6);
 
         this.connect('active-item-changed',
@@ -1150,6 +1151,7 @@ const TorrentsFilters = new Lang.Class({
                     break;
             }
         }
+        gsettings.set_int(TDAEMON_LATEST_FILTER, this._activeItemPos);
     },
 });
 
