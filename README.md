@@ -6,6 +6,10 @@ This extension supports only gnome-shell 3.4
 
 ![Screenshot](https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon/raw/master/screenshot.png)
 
+![Add torrents](https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon/raw/master/screenshot-add.png)
+
+![Filter torrents by state](https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon/raw/master/screenshot-filter.png)
+
 ## Installation
 
 ### Via extensions.gnome.org
