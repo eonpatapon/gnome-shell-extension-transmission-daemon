@@ -871,7 +871,7 @@ const TorrentName = new Lang.Class({
                                      style_class: 'torrent-controls'});
 
         let name_label = new St.Label({text: params.name});
-        name_label.set_style('max-width: 300px');
+        name_label.set_style('max-width: 350px');
 
         this.addActor(name_label);
         this.addActor(this.box, {span: -1, align: St.Align.END});
@@ -1084,36 +1084,41 @@ const ControlButton = new Lang.Class({
 
 const TorrentsFilters = new Lang.Class({
     Name: 'TorrentsFilters',
-    Extends: PopupMenu.PopupComboBoxMenuItem,
+    Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function() {
-        this.parent({style_class: 'torrents-filter-state'});
+        this.parent({reactive: false, style_class: 'status-chooser'});
 
+        this._combo = new PopupMenu.PopupComboBoxMenuItem(
+                                        {style_class: 'status-chooser-combo'});
         let item;
         item = new PopupMenu.PopupMenuItem(_("All"));
-        this.addMenuItem(item, StatusFilter.ALL);
+        this._combo.addMenuItem(item, StatusFilter.ALL);
         item = new PopupMenu.PopupMenuItem(_("Active"));
-        this.addMenuItem(item, StatusFilter.ACTIVE);
+        this._combo.addMenuItem(item, StatusFilter.ACTIVE);
         item = new PopupMenu.PopupMenuItem(_("Downloading"));
-        this.addMenuItem(item, StatusFilter.DOWNLOADING);
+        this._combo.addMenuItem(item, StatusFilter.DOWNLOADING);
         item = new PopupMenu.PopupMenuItem(_("Seeding"));
-        this.addMenuItem(item, StatusFilter.SEEDING);
+        this._combo.addMenuItem(item, StatusFilter.SEEDING);
         item = new PopupMenu.PopupMenuItem(_("Paused"));
-        this.addMenuItem(item, StatusFilter.PAUSED);
+        this._combo.addMenuItem(item, StatusFilter.PAUSED);
         item = new PopupMenu.PopupMenuItem(_("Finished"));
-        this.addMenuItem(item, StatusFilter.FINISHED);
+        this._combo.addMenuItem(item, StatusFilter.FINISHED);
 
-        this.setActiveItem(gsettings.get_int(TDAEMON_LATEST_FILTER));
-        this.setSensitive(6);
+        this._combo.setActiveItem(gsettings.get_int(TDAEMON_LATEST_FILTER));
+        this._combo.setSensitive(6);
 
-        this.connect('active-item-changed',
-                     Lang.bind(this, this.filterByState));
+        this._combo.connect('active-item-changed',
+                            Lang.bind(this, this.filterByState));
+
+        this.addActor(this._combo.actor);
+
     },
 
     filterByState: function() {
         for (let id in transmissionDaemonIndicator._torrents) {
             let torrent = transmissionDaemonIndicator._torrents[id];
-            switch (this._activeItemPos) {
+            switch (this._combo._activeItemPos) {
                 case StatusFilter.ALL:
                     torrent.show();
                     break;
@@ -1151,7 +1156,7 @@ const TorrentsFilters = new Lang.Class({
                     break;
             }
         }
-        gsettings.set_int(TDAEMON_LATEST_FILTER, this._activeItemPos);
+        gsettings.set_int(TDAEMON_LATEST_FILTER, this._combo._activeItemPos);
     },
 });
 
@@ -1163,7 +1168,7 @@ const TorrentsMenu = new Lang.Class({
         this.parent(sourceActor, 0.0, St.Side.TOP);
 
         // override base style
-        this._boxWrapper.set_style('min-width: 400px');
+        this._boxWrapper.set_style('min-width: 450px');
 
         this.controls = new TorrentsControls();
         this.filters = new TorrentsFilters();
