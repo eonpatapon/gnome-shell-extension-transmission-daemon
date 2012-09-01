@@ -503,10 +503,12 @@ const TransmissionDaemonIndicator = new Lang.Class({
             if (this._nb_torrents > 0) {
                 this.menu.controls.addControl(this._stop_btn);
                 this.menu.controls.addControl(this._start_btn);
+                this.menu.filters.show();
             }
             else {
                 this.menu.controls.removeControl(this._stop_btn);
                 this.menu.controls.removeControl(this._start_btn);
+                this.menu.filters.hide();
             }
         }
         else {
@@ -1158,6 +1160,14 @@ const TorrentsFilters = new Lang.Class({
         }
         gsettings.set_int(TDAEMON_LATEST_FILTER, this._combo._activeItemPos);
     },
+
+    hide: function() {
+        this.actor.hide();
+    },
+
+    show: function() {
+        this.actor.show();
+    }
 });
 
 const TorrentsMenu = new Lang.Class({
