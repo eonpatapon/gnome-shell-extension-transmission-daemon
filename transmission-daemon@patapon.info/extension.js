@@ -558,6 +558,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.cleanTorrents(to_remove);
         // Update all torrents properties
         this.updateTorrents();
+        // Filter torrents
+        this.menu.filters.filterByState();
     },
 
     cleanTorrents: function(to_remove) {
@@ -593,7 +595,6 @@ const TransmissionDaemonIndicator = new Lang.Class({
     addTorrent: function(torrent) {
         this._torrents[torrent.id] = new TransmissionTorrent(torrent);
         this.menu.addMenuItem(this._torrents[torrent.id]);
-        this.menu.filters.filterByState();
     },
 
     toString: function() {
