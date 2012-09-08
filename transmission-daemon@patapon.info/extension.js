@@ -35,10 +35,8 @@ const errorIcon = "transmission-error";
 const connectIcon = "transmission-connecting";
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const Gettext = imports.gettext;
 
-Gettext.textdomain("gnome-shell-extension-transmission-daemon");
-Gettext.bindtextdomain("gnome-shell-extension-transmission-daemon", ExtensionUtils.getCurrentExtension().dir.get_child('locale').get_path());
+const Gettext = imports.gettext.domain('gnome-shell-extension-transmission-daemon');
 const _ = Gettext.gettext;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -1236,6 +1234,7 @@ let transmissionDaemonIndicator;
 
 function init(extensionMeta) {
     gsettings = Lib.getSettings(Me);
+    Lib.initTranslations(Me);
     let theme = imports.gi.Gtk.IconTheme.get_default();
     theme.append_search_path(extensionMeta.path + "/icons");
 }
