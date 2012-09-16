@@ -30,9 +30,9 @@ const Gio = imports.gi.Gio;
 
 const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
-const enabledIcon = "transmission";
-const errorIcon = "transmission-error";
-const connectIcon = "transmission-connecting";
+const enabledIcon = "transmission-symbolic";
+const errorIcon = "transmission-error-symbolic";
+const connectIcon = "transmission-connecting-symbolic";
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
@@ -1060,8 +1060,7 @@ const ControlButton = new Lang.Class({
         }
 
         this.icon = new St.Icon({
-            icon_type: St.IconType.SYMBOLIC,
-            icon_name: icon,
+            icon_name: icon + "-symbolic",
             icon_size: icon_size,
         });
 
@@ -1079,7 +1078,7 @@ const ControlButton = new Lang.Class({
     },
 
     setIcon: function(icon) {
-        this.icon.icon_name = icon;
+        this.icon.icon_name = icon + "-symbolic";
     }
 });
 
