@@ -117,7 +117,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-        this._url = 'http://%s:%s%srpc/'.format(host, port.toString(), rpc_url);
+        this._url = 'http://%s:%s%srpc'.format(host, port.toString(), rpc_url);
     },
 
     authenticate: function(session, message, auth, retrying) {
