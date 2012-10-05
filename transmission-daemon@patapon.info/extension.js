@@ -117,7 +117,10 @@ const TransmissionDaemonMonitor = new Lang.Class({
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-        this._url = 'http://%s:%s%srpc'.format(host, port.toString(), rpc_url);
+        if (port == 443)
+            this._url = 'https://%s%srpc'.format(host, rpc_url);
+        else
+            this._url = 'http://%s:%s%srpc'.format(host, port.toString(), rpc_url);
     },
 
     authenticate: function(session, message, auth, retrying) {
@@ -376,7 +379,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-        this._url = 'http://%s:%s%sweb/'.format(this._host, port.toString(), rpc_url);
+        if (port == 443)
+            this._url = 'https://%s%sweb/'.format(this._host, rpc_url);
+        else
+            this._url = 'http://%s:%s%sweb/'.format(this._host, port.toString(), rpc_url);
     },
 
     _onOpenStateChanged: function(menu, open) {
