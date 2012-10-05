@@ -30,9 +30,9 @@ const Gio = imports.gi.Gio;
 
 const upArrow = decodeURIComponent(escape('↑')).toString()
 const downArrow = decodeURIComponent(escape('↓')).toString()
-const enabledIcon = "transmission-symbolic";
-const errorIcon = "transmission-error-symbolic";
-const connectIcon = "transmission-connecting-symbolic";
+const enabledIcon = "my-transmission-symbolic";
+const errorIcon = "my-transmission-error-symbolic";
+const connectIcon = "my-transmission-connecting-symbolic";
 
 const ExtensionUtils = imports.misc.extensionUtils;
 
