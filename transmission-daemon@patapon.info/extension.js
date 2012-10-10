@@ -48,7 +48,7 @@ const TransmissionStatus = {
     CHECK: 2,
     DOWNLOAD_WAIT: 3,
     DOWNLOAD: 4,
-    SEED_WAIT: 6,
+    SEED_WAIT: 5,
     SEED: 6
 }
 
