@@ -42,7 +42,7 @@ const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Lib = Me.imports.lib;
 
-const TransmissionStatus = {
+let TransmissionStatus = {
     STOPPED: 0,
     CHECK_WAIT: 1,
     CHECK: 2,
@@ -290,9 +290,23 @@ const TransmissionDaemonMonitor = new Lang.Class({
 
     processSession: function(session, message) {
         if (message.status_code == "200") {
+            //log(message.response_body.data);
             let response = JSON.parse(message.response_body.data);
             this._session = response.arguments;
+
             transmissionDaemonIndicator.toggleTurtleMode(this._session['alt-speed-enabled']);
+
+            // compat with older daemons
+            if (this._session['rpc-version'] < 14) {
+                TransmissionStatus = {
+                    CHECK_WAIT: 1,
+                    CHECK: 2,
+                    DOWNLOAD: 4,
+                    SEED: 8,
+                    STOPPED: 16
+                }
+            }
+
             if (!this._timers.session) {
                 this._timers.session = Mainloop.timeout_add_seconds(
                                         this._interval * 1.8,
