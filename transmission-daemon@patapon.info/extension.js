@@ -175,7 +175,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
                          "peersSendingToUs", "rateDownload", "rateUpload",
                          "percentDone", "isFinished", "peersConnected",
                          "uploadedEver", "sizeWhenDone", "status",
-                         "uploadRatio"]
+                         "uploadRatio", "eta"]
             }
         };
         if (this._torrents != false)
@@ -742,6 +742,7 @@ const TransmissionTorrent = new Lang.Class({
         let sizeWhenDone = readableSize(this._params.sizeWhenDone);
         let uploadedEver = readableSize(this._params.uploadedEver);
         let percentDone = (this._params.percentDone * 100).toFixed(1) + "%";
+        let eta = this._params.eta;
         this._params.percentUploaded = this._params.uploadedEver / this._params.sizeWhenDone;
 
         this._infos.seeds = "";
@@ -778,9 +779,16 @@ const TransmissionTorrent = new Lang.Class({
                 else
                     this._infos.seeds = this.getStateString(TransmissionStatus.DOWNLOAD_WAIT)
 
-                this._infos.size = _("%s of %s (%s)").format(currentSize,
+                // Format ETA string
+                if (eta < 0 || eta >= (999*60*60))
+                    eta = _('remaining time unknown');
+                else
+                    eta = _('%s remaining').format(timeInterval(eta));
+
+                this._infos.size = _("%s of %s (%s) - %s").format(currentSize,
                                                              sizeWhenDone,
-                                                             percentDone);
+                                                             percentDone,
+                                                             eta);
                 break;
             case TransmissionStatus.SEED_WAIT:
             case TransmissionStatus.SEED:
@@ -1372,4 +1380,32 @@ function readableSize(size) {
         n--;
 
     return "%s %s".format(size.toFixed(n), units[i]);
+}
+
+function timeInterval(seconds) {
+    var days    = Math.floor (seconds / 86400),
+        hours   = Math.floor ((seconds % 86400) / 3600),
+        minutes = Math.floor ((seconds % 3600) / 60),
+        seconds = Math.floor (seconds % 60),
+        d = days    + ' ' + (days    > 1 ? _('days')    : _('day')),
+        h = hours   + ' ' + (hours   > 1 ? _('hours')   : _('hour')),
+        m = minutes + ' ' + (minutes > 1 ? _('minutes') : _('minute')),
+        s = seconds + ' ' + (seconds > 1 ? _('seconds') : _('second'));
+
+    if (days) {
+        if (days >= 4 || !hours)
+            return d;
+        return d + ', ' + h;
+    }
+    if (hours) {
+        if (hours >= 4 || !minutes)
+            return h;
+        return h + ', ' + m;
+    }
+    if (minutes) {
+        if (minutes >= 4 || !seconds)
+            return m;
+        return m + ', ' + s;
+    }
+    return s;
 }
