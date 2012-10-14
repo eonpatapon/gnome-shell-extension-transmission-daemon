@@ -27,7 +27,7 @@ let gsettings;
 let settings;
 
 function init() {
-    //Lib.initTranslations(Me);
+    Lib.initTranslations(Me);
     gsettings = Lib.getSettings(Me);
     settings = {
         host: {label: _("Hostname"), help: _('Hostname or IP where Transmission is running'), type: 's'},
