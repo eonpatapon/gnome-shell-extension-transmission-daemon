@@ -601,8 +601,41 @@ const TransmissionDaemonIndicator = new Lang.Class({
     launchClient: function() {
         let appSys = Shell.AppSystem.get_default();
         let app = appSys.lookup_app('transmission-gtk.desktop');
-        app.activate_full(-1, 0);
-        this.menu.close();
+        let appWin = this.findAppWindow(app);
+        let workspace_index = global.screen.get_active_workspace_index();
+        let workspace = global.screen.get_active_workspace();
+
+        // Window is on the current workspace
+        if (app.is_on_workspace(workspace)) {
+            // If the window is currently focused
+            // minimize it and close the menu
+            if (appWin && global.display.focus_window == appWin) {
+                appWin.minimize();
+                this.menu.close();
+            }
+            // Bring the window to front
+            else
+                app.activate_full(-1, 0);
+        }
+        else {
+            // Change to the current workspace and
+            // bring to front
+            if (appWin)
+                appWin.change_workspace_by_index(workspace_index, false, 
+                                                 global.get_current_time());
+            app.activate_full(-1, 0);
+        }
+    },
+
+    findAppWindow: function(app) {
+        let tracker = Shell.WindowTracker.get_default();
+        let windowActors = global.get_window_actors();
+        for (let i in windowActors) {
+            let win = windowActors[i].get_meta_window();
+            if (tracker.get_window_app(win) == app)
+                return win;
+        }
+        return false;
     },
 
     launchPrefs: function() {
