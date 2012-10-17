@@ -551,8 +551,11 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     refreshControls: function(state_changed) {
-        if (state_changed)
+        if (state_changed) {
             this.menu.controls.removeControls();
+            this.menu.bottom_controls.removeControls();
+            this.menu.filters.hide();
+        }
 
         if (this._state == ErrorType.NO_ERROR) {
             if (this._server_type == "daemon")
