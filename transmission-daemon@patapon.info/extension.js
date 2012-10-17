@@ -380,7 +380,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                             Lang.bind(this, this.startAll));
         this._web_btn = new ControlButton('web-browser', _('Open Web UI'),
                                           Lang.bind(this, this.launchWebUI));
-        this._client_btn = new ControlButton('transmission', _('Open Transmission'),
+        this._client_btn = new ControlButton('my-transmission', _('Open Transmission'),
                                              Lang.bind(this, this.launchClient));
         this._pref_btn = new ControlButton('preferences-system',
                                            _('Preferences'),
