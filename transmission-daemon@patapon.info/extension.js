@@ -965,6 +965,15 @@ const TransmissionTorrent = new Lang.Class({
 
     show: function() {
         this.actor.show();
+    },
+
+    destroy: function() {
+        this._name.destroy();
+        this._seeds_info.destroy();
+        this._progress_bar.destroy();
+        this._error_info.destroy();
+        this._size_info.destroy();
+        this.parent();
     }
 });
 
