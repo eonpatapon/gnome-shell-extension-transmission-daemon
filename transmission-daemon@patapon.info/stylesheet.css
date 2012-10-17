@@ -32,6 +32,10 @@
     spacing: 5px;
 }
 
+.torrents-controls-text:inactive {
+    height: 0px;
+}
+
 .torrent-controls {
     spacing: 3px;
 }

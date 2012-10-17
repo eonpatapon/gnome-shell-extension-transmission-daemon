@@ -1018,7 +1018,8 @@ const TorrentsControls = new Lang.Class({
 
         this.ctrl_btns = new St.BoxLayout({vertical: false,
                                            style_class: 'torrents-controls'});
-        this.ctrl_info = new St.Label();
+        this.ctrl_info = new St.Label({style_class: 'torrents-controls-text'});
+        this.ctrl_info.add_style_pseudo_class("inactive");
 
 
         this.ctrl_box.add(this.ctrl_btns);
@@ -1043,6 +1044,7 @@ const TorrentsControls = new Lang.Class({
                 this.ctrl_btns.insert_child_at_index(button, position);
             else
                 this.ctrl_btns.add_actor(button);
+            this.ctrl_info.remove_style_pseudo_class("inactive");
             button.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
@@ -1065,6 +1067,7 @@ const TorrentsControls = new Lang.Class({
         this.ctrl_btns.get_children().forEach(Lang.bind(this, function(b) {
             this.removeControl(b);
         }));
+        this.ctrl_info.add_style_pseudo_class("inactive");
     }
 });
 
@@ -1296,6 +1299,7 @@ const TorrentsMenu = new Lang.Class({
 
         this.controls = new TorrentsTopControls();
         this.filters = new TorrentsFilters();
+        this.filters.hide();
         this.bottom_controls = new TorrentsBottomControls();
 
         this._scroll = new St.ScrollView({style_class: 'vfade popup-sub-menu torrents-list',
