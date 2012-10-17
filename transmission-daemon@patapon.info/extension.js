@@ -1422,11 +1422,11 @@ function readableSize(size) {
     return "%s %s".format(size.toFixed(n), units[i]);
 }
 
-function timeInterval(seconds) {
-    var days    = Math.floor (seconds / 86400),
-        hours   = Math.floor ((seconds % 86400) / 3600),
-        minutes = Math.floor ((seconds % 3600) / 60),
-        seconds = Math.floor (seconds % 60),
+function timeInterval(secs) {
+    var days    = Math.floor (secs / 86400),
+        hours   = Math.floor ((secs % 86400) / 3600),
+        minutes = Math.floor ((secs % 3600) / 60),
+        seconds = Math.floor (secs % 60),
         d = days    + ' ' + (days    > 1 ? _('days')    : _('day')),
         h = hours   + ' ' + (hours   > 1 ? _('hours')   : _('hour')),
         m = minutes + ' ' + (minutes > 1 ? _('minutes') : _('minute')),
