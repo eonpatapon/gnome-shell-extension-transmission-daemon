@@ -28,8 +28,17 @@ const ShellDBus = imports.ui.shellDBus;
 const Shell = imports.gi.Shell;
 const Gio = imports.gi.Gio;
 
-const upArrow = decodeURIComponent(escape('↑')).toString()
-const downArrow = decodeURIComponent(escape('↓')).toString()
+let upArrow = "";
+let downArrow = "";
+try {
+    upArrow = decodeURIComponent(escape('↑')).toString();
+    downArrow = decodeURIComponent(escape('↓')).toString();
+}
+catch(e) {
+    upArrow = '↑';
+    downArrow = '↓';
+}
+
 const enabledIcon = "my-transmission-symbolic";
 const errorIcon = "my-transmission-error-symbolic";
 const connectIcon = "my-transmission-connecting-symbolic";
