@@ -184,7 +184,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
                          "peersSendingToUs", "rateDownload", "rateUpload",
                          "percentDone", "isFinished", "peersConnected",
                          "uploadedEver", "sizeWhenDone", "status",
-                         "uploadRatio", "eta"]
+                         "webseedsSendingToUs", "uploadRatio", "eta"]
             }
         };
         if (this._torrents != false)
@@ -1295,8 +1295,11 @@ const TorrentsFilters = new Lang.Class({
                     torrent.show();
                     break;
                 case StatusFilter.ACTIVE:
-                    if (torrent._params.status != TransmissionStatus.STOPPED)
-                        torrent.show();
+                    if (torrent._params.peersGettingFromUs > 0 ||
+                        torrent._params.peersSendingToUs > 0 ||
+                        torrent._params.webseedsSendingToUs > 0 ||
+                        torrent._params.status == TransmissionStatus.CHECK)
+                            torrent.show();
                     else
                         torrent.hide();
                     break;
