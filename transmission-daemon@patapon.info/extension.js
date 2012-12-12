@@ -288,6 +288,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
                 if (error)
                     transmissionDaemonIndicator.connectionError(ErrorType.CONNECTION_ERROR,
                                                                 error);
+                // clean torrent list on connection error
+                this.torrents = false;
             }
             if (!this._timers.stats) {
                 this._timers.stats = Mainloop.timeout_add_seconds(
@@ -630,7 +632,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
             // Change to the current workspace and
             // bring to front
             if (appWin)
-                appWin.change_workspace_by_index(workspace_index, false, 
+                appWin.change_workspace_by_index(workspace_index, false,
                                                  global.get_current_time());
             app.activate_full(-1, 0);
         }
