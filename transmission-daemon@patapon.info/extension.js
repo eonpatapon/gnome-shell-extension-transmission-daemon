@@ -1049,8 +1049,8 @@ const TorrentName = new Lang.Class({
                                            Lang.bind(this, this.remove),
                                            "small");
 
-        this.box.add(start_stop_btn);
-        this.box.add(remove_btn);
+        this.box.add(start_stop_btn.actor);
+        this.box.add(remove_btn.actor);
     },
 });
 
@@ -1092,18 +1092,18 @@ const TorrentsControls = new Lang.Class({
     },
 
     addControl: function(button, position) {
-        if (!this.ctrl_btns.contains(button)) {
+        if (!this.ctrl_btns.contains(button.actor)) {
             if (position)
-                this.ctrl_btns.insert_child_at_index(button, position);
+                this.ctrl_btns.insert_child_at_index(button.actor, position);
             else
-                this.ctrl_btns.add_actor(button);
+                this.ctrl_btns.add_actor(button.actor);
             this.ctrl_info.remove_style_pseudo_class("inactive");
-            button.connect('notify::hover', Lang.bind(this, function(button) {
+            button.actor.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
-                    if (button._info != this.ctrl_info.text)
+                    if (button._delegate._info != this.ctrl_info.text)
                         this._old_info = this.ctrl_info.text;
-                    this.ctrl_info.text = button._info;
+                    this.ctrl_info.text = button._delegate._info;
                 }
                 else
                     this.ctrl_info.text = this._old_info;
@@ -1112,8 +1112,11 @@ const TorrentsControls = new Lang.Class({
     },
 
     removeControl: function(button, name) {
-        if (this.ctrl_btns.contains(button))
-            this.ctrl_btns.remove_actor(button);
+        let button_actor = button;
+        if (button instanceof ControlButton)
+            button_actor = button.actor;
+        if (this.ctrl_btns.contains(button_actor))
+            this.ctrl_btns.remove_actor(button_actor);
     },
 
     removeControls: function() {
@@ -1142,7 +1145,7 @@ const TorrentsTopControls = new Lang.Class({
         this.add_box.hide();
 
         this.add_box.add(this.add_entry, {expand: true});
-        this.add_box.add(this.add_btn);
+        this.add_box.add(this.add_btn.actor);
 
         this.ctrl_info.text = _("Connecting...");
 
@@ -1157,7 +1160,7 @@ const TorrentsTopControls = new Lang.Class({
             this.add_box.show();
             let [min_width, pref_width] = this.add_entry.get_preferred_width(-1);
             this.add_entry.width = pref_width;
-            this.add_box_btn.add_style_pseudo_class('active');
+            this.add_box_btn.actor.add_style_pseudo_class('active');
         }
     },
 
@@ -1167,7 +1170,7 @@ const TorrentsTopControls = new Lang.Class({
         this.add_entry.remove_style_pseudo_class('error');
         this.add_entry.remove_style_pseudo_class('inactive');
         if (this.add_box_btn)
-            this.add_box_btn.remove_style_pseudo_class('active');
+            this.add_box_btn.actor.remove_style_pseudo_class('active');
         this.add_box.hide();
     },
 
@@ -1211,19 +1214,17 @@ const TorrentsBottomControls = new Lang.Class({
         }
 
         if (this._turtle_state)
-            button.add_style_pseudo_class('active');
+            button.actor.add_style_pseudo_class('active');
         else
-            button.remove_style_pseudo_class('active');
+            button.actor.remove_style_pseudo_class('active');
     },
 });
 
 
 const ControlButton = new Lang.Class({
     Name: 'ControlButton',
-    Extends: St.Button,
 
     _init: function(icon, info, callback, type) {
-
         let icon_size = 20;
         let padding = 8;
         if (type && type == "small") {
@@ -1236,15 +1237,14 @@ const ControlButton = new Lang.Class({
             icon_size: icon_size,
         });
 
-        this.parent({style_class: 'notification-icon-button',
-                     child: this.icon});
-
-
-        this.connect('clicked', callback);
+        this.actor = new St.Button({style_class: 'notification-icon-button',
+                                    child: this.icon});
+        this.actor._delegate = this;
+        this.actor.connect('clicked', callback);
 
         // override base style
         this.icon.set_style('padding: 0px');
-        this.set_style('padding: %spx'.format(padding.toString()));
+        this.actor.set_style('padding: %spx'.format(padding.toString()));
 
         this._info = info;
     },
