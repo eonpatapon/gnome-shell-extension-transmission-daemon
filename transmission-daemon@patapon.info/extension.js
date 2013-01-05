@@ -402,6 +402,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._turtle_btn = new ControlButton('turtle',
                                              _('Toggle turtle mode'),
                                              Lang.bind(this, this.toggleTurtleMode));
+        this._display_btn = new ControlButton('view-list',
+                                              _('Toggle display mode'),
+                                              Lang.bind(this, this.toggleDisplayMode));
 
         this._indicatorBox = new St.BoxLayout();
         this._icon = new St.Icon({icon_name: connectIcon,
@@ -414,7 +417,9 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.actor.add_actor(this._indicatorBox);
         this.actor.add_style_class_name('panel-status-button');
 
-        this.setMenu(new TorrentsMenu(this.actor));
+        let menu = new TorrentsMenu(this.actor)
+        menu._delegate = this;
+        this.setMenu(menu);
 
         this.updateOptions();
         gsettings.connect("changed", Lang.bind(this, function() {
@@ -585,6 +590,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                 this.menu.filters.hide();
             }
             this.menu.bottom_controls.addControl(this._turtle_btn);
+            this.menu.bottom_controls.addControl(this._display_btn);
         }
         else {
             this.menu.controls.addControl(this._pref_btn);
@@ -665,6 +671,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.menu.bottom_controls.toggleTurtleMode(this._turtle_btn, state);
     },
 
+    toggleDisplayMode: function(state) {
+        this.menu.bottom_controls.toggleDisplayMode(this._display_btn, state);
+    },
+
     updateList: function(to_remove) {
         // Remove old torrents
         this.cleanTorrents(to_remove);
@@ -704,15 +714,94 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._torrents[torrent.id].update(torrent);
     },
 
-    addTorrent: function(torrent) {
-        this._torrents[torrent.id] = new TransmissionTorrent(torrent);
+    addTorrent: function(torrent, klass, visible) {
+        if (!klass)
+            klass = TransmissionTorrent;
+        this._torrents[torrent.id] = new klass(torrent);
+        if (visible === false)
+            this._torrents[torrent.id].hide();
         this.menu.addMenuItem(this._torrents[torrent.id]);
+    },
+
+    changeTorrentClass: function(klass) {
+        for (let id in this._torrents) {
+            let visible = this._torrents[id].actor.visible;
+            let torrent = this._torrents[id]._params;
+            this.removeTorrent(id);
+            this.addTorrent(torrent, klass, visible);
+        }
     },
 
     toString: function() {
         return "[object TransmissionDaemonIndicator]";
     }
 
+});
+
+const TransmissionTorrentSmall = new Lang.Class({
+    Name: 'TransmissionTorrentSmall',
+    Extends: PopupMenu.PopupBaseMenuItem,
+
+    _init: function(params) {
+        this.parent({reactive: false,
+                     style_class: 'torrent-small'});
+
+        this._params = params;
+        this._info = "";
+
+        this.box = new St.BoxLayout({vertical: false, style_class: 'torrent-small-infos'});
+
+        let name_label = new St.Label({text: this._params.name});
+        name_label.set_style('max-width: 300px');
+
+        this.infos = new St.Label({});
+        this.box.add(this.infos);
+
+        this.addActor(name_label);
+        this.addActor(this.box, {span: -1, align: St.Align.END});
+
+        this.buildInfo();
+    },
+
+    buildInfo: function() {
+        let infos = new Array();
+        let rateDownload = readableSize(this._params.rateDownload);
+        let rateUpload = readableSize(this._params.rateUpload);
+        let ratio = this._params.uploadRatio.toFixed(1);
+        let percentDone = (this._params.percentDone * 100).toFixed(1) + "%";
+
+        if (ratio > 0)
+            infos.push(_('<span foreground="#aaa" size="xx-small">Ratio %s</span>').format(ratio));
+        if (this._params.rateDownload > 0)
+            infos.push(_('<span foreground="#97EE4D"><b>%s</b> %s/s</span>').format(downArrow,
+                                                                                    rateDownload));
+        if (this._params.rateUpload > 0)
+            infos.push(_('<span foreground="#4DBFEE">%s %s/s</span>').format(upArrow,
+                                                                             rateUpload));
+        infos.push(_('<span foreground="#ccc" size="xx-small">%s</span>').format(percentDone));
+
+        this._info = infos.join('<span foreground="#aaa">,</span> ');
+        this.infos.clutter_text.set_markup(this._info);
+    },
+
+    update: function(params) {
+        this._params = params;
+        this.buildInfo();
+    },
+
+    toString: function() {
+        return "[object TransmissionTorrentSmall <%s>]".format(this._params.name);
+    },
+
+    close: function() {},
+
+    hide: function() {
+        this.actor.hide();
+    },
+
+    show: function() {
+        this.actor.show();
+    }
 });
 
 const TransmissionTorrent = new Lang.Class({
@@ -1203,6 +1292,7 @@ const TorrentsBottomControls = new Lang.Class({
         this.parent({reactive: false});
 
         this._turtle_state = false;
+        this._display_state = false;
     },
 
     toggleTurtleMode: function(button, state) {
@@ -1214,6 +1304,24 @@ const TorrentsBottomControls = new Lang.Class({
         }
 
         if (this._turtle_state)
+            button.actor.add_style_pseudo_class('active');
+        else
+            button.actor.remove_style_pseudo_class('active');
+    },
+
+    toggleDisplayMode: function(button, state) {
+        let indicator = this._delegate._delegate;
+        if (state == true || state == false)
+            this._display_state = state;
+        else {
+            this._display_state = !this._display_state;
+            if (this._display_state)
+                indicator.changeTorrentClass(TransmissionTorrentSmall);
+            else
+                indicator.changeTorrentClass(TransmissionTorrent);
+        }
+
+        if (this._display_state)
             button.actor.add_style_pseudo_class('active');
         else
             button.actor.remove_style_pseudo_class('active');
@@ -1357,6 +1465,7 @@ const TorrentsMenu = new Lang.Class({
         this.filters = new TorrentsFilters();
         this.filters.hide();
         this.bottom_controls = new TorrentsBottomControls();
+        this.bottom_controls._delegate = this;
 
         this._scroll = new St.ScrollView({style_class: 'vfade popup-sub-menu torrents-list',
                                           hscrollbar_policy: Gtk.PolicyType.NEVER,
@@ -1379,7 +1488,7 @@ const TorrentsMenu = new Lang.Class({
     },
 
     addMenuItem: function(menuItem, position) {
-        if (menuItem instanceof TransmissionTorrent) {
+        if (menuItem instanceof TransmissionTorrent || menuItem instanceof TransmissionTorrentSmall) {
             this._scrollBox.add(menuItem.actor);
             this._connectSubMenuSignals(menuItem, menuItem);
             menuItem._closingId = this.connect('open-state-changed',
