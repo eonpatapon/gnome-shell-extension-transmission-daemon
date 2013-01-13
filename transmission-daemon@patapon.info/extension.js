@@ -780,14 +780,14 @@ const TransmissionTorrentSmall = new Lang.Class({
         let percentDone = (this._params.percentDone * 100).toFixed(1) + "%";
 
         if (ratio > 0)
-            infos.push(_('<span foreground="#aaa" size="xx-small">Ratio %s</span>').format(ratio));
+            infos.push('<span foreground="#aaa" size="xx-small">' + _('Ratio %s').format(ratio) + '</span>');
         if (this._params.rateDownload > 0)
-            infos.push(_('<span foreground="#97EE4D"><b>%s</b> %s/s</span>').format(downArrow,
-                                                                                    rateDownload));
+            infos.push('<span foreground="#97EE4D"><b>%s</b> %s/s</span>'.format(downArrow,
+                                                                                 rateDownload));
         if (this._params.rateUpload > 0)
-            infos.push(_('<span foreground="#4DBFEE">%s %s/s</span>').format(upArrow,
-                                                                             rateUpload));
-        infos.push(_('<span foreground="#ccc" size="xx-small">%s</span>').format(percentDone));
+            infos.push('<span foreground="#4DBFEE">%s %s/s</span>'.format(upArrow,
+                                                                          rateUpload));
+        infos.push('<span foreground="#ccc" size="xx-small">%s</span>'.format(percentDone));
 
         this._info = infos.join('<span foreground="#aaa">,</span> ');
         this.infos.clutter_text.set_markup(this._info);
