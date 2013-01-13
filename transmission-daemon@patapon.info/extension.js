@@ -95,6 +95,12 @@ const TDAEMON_STATS_ICONS_KEY = 'stats-icons';
 const TDAEMON_STATS_NUMERIC_KEY = 'stats-numeric';
 const TDAEMON_ALWAYS_SHOW_KEY = 'always-show';
 const TDAEMON_LATEST_FILTER = 'latest-filter';
+const TDAEMON_TORRENTS_DISPLAY = 'torrents-display';
+
+const TorrentDisplayClass = {
+    TransmissionTorrent: 0,
+    TransmissionTorrentSmall: 1
+}
 
 if (!_httpSession) {
     const _httpSession = new Soup.SessionAsync();
@@ -428,6 +434,10 @@ const TransmissionDaemonIndicator = new Lang.Class({
         }));
 
         this.refreshControls(false);
+
+        if (gsettings.get_enum(TDAEMON_TORRENTS_DISPLAY) == TorrentDisplayClass.TransmissionTorrentSmall) {
+            this.toggleDisplayMode(true);
+        }
     },
 
     hide: function() {
@@ -714,21 +724,20 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._torrents[torrent.id].update(torrent);
     },
 
-    addTorrent: function(torrent, klass, visible) {
-        if (!klass)
-            klass = TransmissionTorrent;
+    addTorrent: function(torrent, visible) {
+        let klass = TorrentDisplayClasses[gsettings.get_enum(TDAEMON_TORRENTS_DISPLAY)]
         this._torrents[torrent.id] = new klass(torrent);
         if (visible === false)
             this._torrents[torrent.id].hide();
         this.menu.addMenuItem(this._torrents[torrent.id]);
     },
 
-    changeTorrentClass: function(klass) {
+    changeTorrentClass: function() {
         for (let id in this._torrents) {
             let visible = this._torrents[id].actor.visible;
             let torrent = this._torrents[id]._params;
             this.removeTorrent(id);
-            this.addTorrent(torrent, klass, visible);
+            this.addTorrent(torrent, visible);
         }
     },
 
@@ -1310,21 +1319,24 @@ const TorrentsBottomControls = new Lang.Class({
     },
 
     toggleDisplayMode: function(button, state) {
-        let indicator = this._delegate._delegate;
         if (state == true || state == false)
             this._display_state = state;
-        else {
+        else
             this._display_state = !this._display_state;
-            if (this._display_state)
-                indicator.changeTorrentClass(TransmissionTorrentSmall);
-            else
-                indicator.changeTorrentClass(TransmissionTorrent);
+
+        if (this._display_state) {
+            button.actor.add_style_pseudo_class('active');
+            gsettings.set_enum(TDAEMON_TORRENTS_DISPLAY, TorrentDisplayClass.TransmissionTorrentSmall);
+        }
+        else {
+            button.actor.remove_style_pseudo_class('active');
+            gsettings.set_enum(TDAEMON_TORRENTS_DISPLAY, TorrentDisplayClass.TransmissionTorrent);
         }
 
-        if (this._display_state)
-            button.actor.add_style_pseudo_class('active');
-        else
-            button.actor.remove_style_pseudo_class('active');
+        if (state != true && state != false) {
+            let indicator = this._delegate._delegate;
+            indicator.changeTorrentClass();
+        }
     },
 });
 
@@ -1513,6 +1525,8 @@ const TorrentsMenu = new Lang.Class({
         this.controls.hideAddEntry();
     }
 });
+
+const TorrentDisplayClasses = [TransmissionTorrent, TransmissionTorrentSmall];
 
 let gsettings;
 let transmissionDaemonMonitor;
