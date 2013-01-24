@@ -1,10 +1,3 @@
-# French translations for gnome-shell-extension-transmission-daemon package
-# Traduction française pour gnome-shell-extension-transmission-daemon.
-# Copyright (C) 2012 THE gnome-shell-extension-transmission-daemon'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-shell-extension-transmission-daemon package.
-# Christophe Meyer <stombi@gmail.com>, 2012.
-# Jean-Philippe Braun <eon@patapon.info>, 2012.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-transmission-daemon\n"
