@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-shell-extension-transmission-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-13 11:22+0100\n"
-"PO-Revision-Date: 2013-01-23 19:54-0300\n"
+"PO-Revision-Date: 2013-01-24 11:46-0300\n"
 "Last-Translator: Cristian Beroiza <cberoiza@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -96,7 +96,7 @@ msgstr "No se puede conectar a Transmission"
 
 #: ../../../extension.js:393
 msgid "Pause all torrents"
-msgstr "Pausar todo los torrents"
+msgstr "Pausar todos los torrents"
 
 #: ../../../extension.js:396
 msgid "Start all torrents"
@@ -120,7 +120,7 @@ msgstr "Agregar un torrent"
 
 #: ../../../extension.js:409
 msgid "Toggle turtle mode"
-msgstr "Activar/Desactivar modo \"tortuga\""
+msgstr "Activar/Desactivar velocidades alternativas"
 
 #: ../../../extension.js:412
 msgid "Toggle display mode"
