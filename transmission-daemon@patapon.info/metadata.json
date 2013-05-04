@@ -1,5 +1,5 @@
 {
-"shell-version": ["3.4", "3.5.91", "3.5.92", "3.6", "3.7.1"],
+"shell-version": ["3.4", "3.6", "3.8", "3.8.1"],
 "uuid": "transmission-daemon@patapon.info",
 "name": "Transmission Daemon Indicator",
 "url": "https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon",
