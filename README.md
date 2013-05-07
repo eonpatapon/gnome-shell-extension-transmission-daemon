@@ -2,7 +2,7 @@
 
 Monitor a remote transmission-daemon or transmission-client using its RPC interface.
 
-This extension supports only gnome-shell 3.4
+This extension supports Gnome Shell DE, from version 3.4 up to 3.8.1
 
 ![Screenshot](https://github.com/eonpatapon/gnome-shell-extension-transmission-daemon/raw/master/screenshot.png)
 
