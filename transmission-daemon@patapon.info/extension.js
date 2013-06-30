@@ -1169,7 +1169,8 @@ const TorrentsControls = new Lang.Class({
 
         this.ctrl_btns = new St.BoxLayout({vertical: false,
                                            style_class: 'torrents-controls'});
-        this.ctrl_info = new St.Label({style_class: 'torrents-controls-text'});
+        this.ctrl_info = new St.Label({style_class: 'torrents-controls-text', 
+                                       text: ''});
         this.ctrl_info.add_style_pseudo_class("inactive");
 
 
