@@ -415,7 +415,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this._indicatorBox = new St.BoxLayout();
         this._icon = new St.Icon({icon_name: connectIcon,
                                   style_class: 'system-status-icon'});
-        this._status = new St.Label();
+        this._status = new St.Label({text: ''});
 
         this._indicatorBox.add(this._icon);
         this._indicatorBox.add(this._status);
@@ -763,7 +763,7 @@ const TransmissionTorrentSmall = new Lang.Class({
         let name_label = new St.Label({text: this._params.name});
         name_label.set_style('max-width: 300px');
 
-        this.infos = new St.Label({});
+        this.infos = new St.Label({text: ''});
         this.box.add(this.infos);
 
         this.addActor(name_label);
