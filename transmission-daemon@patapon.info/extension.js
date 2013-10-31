@@ -428,9 +428,13 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.setMenu(menu);
 
         this.updateOptions();
-        gsettings.connect("changed", Lang.bind(this, function() {
+        let settingsId = gsettings.connect("changed", Lang.bind(this, function() {
             this.updateOptions();
             this.updateStats(true);
+        }));
+
+        this.connect("destroy", Lang.bind(null, function() {
+            gsettings.disconnect(settingsId);
         }));
 
         this.refreshControls(false);
