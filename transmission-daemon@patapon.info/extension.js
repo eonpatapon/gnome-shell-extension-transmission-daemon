@@ -770,8 +770,8 @@ const TransmissionTorrentSmall = new Lang.Class({
         this.infos = new St.Label({text: ''});
         this.box.add(this.infos);
 
-        this.addActor(name_label);
-        this.addActor(this.box, {span: -1, align: St.Align.END});
+        this.actor.add(name_label);
+        this.actor.add(this.box, {span: -1, align: St.Align.END});
 
         this.buildInfo();
     },
@@ -843,7 +843,7 @@ const TransmissionTorrent = new Lang.Class({
                                                  reactive: false});
         this._progress_bar.height = 10;
         this._progress_bar.connect('repaint', Lang.bind(this, this._draw));
-        this.addActor(this._progress_bar);
+        this.actor.add(this._progress_bar);
 
         this._error_info = new PopupMenu.PopupMenuItem(this._infos.error,
                                                        {reactive: false,
@@ -1107,8 +1107,8 @@ const TorrentName = new Lang.Class({
         let name_label = new St.Label({text: params.name});
         name_label.set_style('max-width: 350px');
 
-        this.addActor(name_label);
-        this.addActor(this.box, {span: -1, align: St.Align.END});
+        this.actor.add(name_label);
+        this.actor.add(this.box, {span: -1, align: St.Align.END});
 
         this.updateButtons();
     },
@@ -1186,7 +1186,7 @@ const TorrentsControls = new Lang.Class({
 
         this.vbox.add(this.ctrl_box, {expand: true, span: -1});
 
-        this.addActor(this.vbox, {expand: true, span: -1});
+        this.actor.add(this.vbox, {expand: true, span: -1});
     },
 
     setInfo: function(text) {
@@ -1379,7 +1379,7 @@ const ControlButton = new Lang.Class({
     }
 });
 
-const TorrentsFilters = new Lang.Class({
+/*const TorrentsFilters = new Lang.Class({
     Name: 'TorrentsFilters',
     Extends: PopupMenu.PopupBaseMenuItem,
 
@@ -1408,7 +1408,7 @@ const TorrentsFilters = new Lang.Class({
         this._combo.connect('active-item-changed',
                             Lang.bind(this, this.filterByState));
 
-        this.addActor(this._combo.actor);
+        this.actor.add(this._combo.actor);
 
     },
 
@@ -1466,7 +1466,7 @@ const TorrentsFilters = new Lang.Class({
     show: function() {
         this.actor.show();
     }
-});
+});*/
 
 const TorrentsMenu = new Lang.Class({
     Name: 'TorrentsMenu',
@@ -1476,11 +1476,14 @@ const TorrentsMenu = new Lang.Class({
         this.parent(sourceActor, 0.0, St.Side.TOP);
 
         // override base style
+        //this._boxWrapper.set_style('min-width: 450px');
+        this._boxWrapper = new St.BoxLayout();
         this._boxWrapper.set_style('min-width: 450px');
+        this.box.add(this._boxWrapper);
 
         this.controls = new TorrentsTopControls();
-        this.filters = new TorrentsFilters();
-        this.filters.hide();
+        //this.filters = new TorrentsFilters();
+        //this.filters.hide();
         this.bottom_controls = new TorrentsBottomControls();
         this.bottom_controls._delegate = this;
 
@@ -1491,7 +1494,7 @@ const TorrentsMenu = new Lang.Class({
         this._scroll.add_actor(this._scrollBox);
 
         this.addMenuItem(this.controls);
-        this.addMenuItem(this.filters);
+        //this.addMenuItem(this.filters);
         this.box.add(this._scroll);
         this.addMenuItem(this.bottom_controls);
 
