@@ -1476,11 +1476,14 @@ const TorrentsMenu = new Lang.Class({
         this.parent(sourceActor, 0.0, St.Side.TOP);
 
         // override base style
+        //this._boxWrapper.set_style('min-width: 450px');
+        this._boxWrapper = new St.BoxLayout();
         this._boxWrapper.set_style('min-width: 450px');
+        this.box.add(this._boxWrapper);
 
         this.controls = new TorrentsTopControls();
-        this.filters = new TorrentsFilters();
-        this.filters.hide();
+        //this.filters = new TorrentsFilters();
+        //this.filters.hide();
         this.bottom_controls = new TorrentsBottomControls();
         this.bottom_controls._delegate = this;
 
@@ -1491,7 +1494,7 @@ const TorrentsMenu = new Lang.Class({
         this._scroll.add_actor(this._scrollBox);
 
         this.addMenuItem(this.controls);
-        this.addMenuItem(this.filters);
+        //this.addMenuItem(this.filters);
         this.box.add(this._scroll);
         this.addMenuItem(this.bottom_controls);
 
