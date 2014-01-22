@@ -1379,7 +1379,7 @@ const ControlButton = new Lang.Class({
     }
 });
 
-const TorrentsFilters = new Lang.Class({
+/*const TorrentsFilters = new Lang.Class({
     Name: 'TorrentsFilters',
     Extends: PopupMenu.PopupBaseMenuItem,
 
@@ -1466,7 +1466,7 @@ const TorrentsFilters = new Lang.Class({
     show: function() {
         this.actor.show();
     }
-});
+});*/
 
 const TorrentsMenu = new Lang.Class({
     Name: 'TorrentsMenu',
