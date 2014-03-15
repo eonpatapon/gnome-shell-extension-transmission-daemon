@@ -84,6 +84,15 @@ const StatusFilter = {
     FINISHED: 5
 }
 
+const StatusFilterLabels = {
+    0: _('All'),
+    1: _('Active'),
+    2: _('Downloading'),
+    3: _('Seeding'),
+    4: _('Paused'),
+    5: _('Stopped')
+}
+
 const TDAEMON_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.transmission-daemon';
 const TDAEMON_HOST_KEY = 'host';
 const TDAEMON_PORT_KEY = 'port';
@@ -413,12 +422,16 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                               Lang.bind(this, this.toggleDisplayMode));
 
         this._indicatorBox = new St.BoxLayout();
+
         this._icon = new St.Icon({icon_name: connectIcon,
                                   style_class: 'system-status-icon'});
+
         this._status = new St.Label({text: ''});
+        this._statusBin = new St.Bin({child: this._status,
+                                      y_align: St.Align.MIDDLE});
 
         this._indicatorBox.add(this._icon);
-        this._indicatorBox.add(this._status);
+        this._indicatorBox.add(this._statusBin);
 
         this.actor.add_actor(this._indicatorBox);
         this.actor.add_style_class_name('panel-status-button');
@@ -518,7 +531,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
                                   '/org/freedesktop/DBus');
         proxy.ListNamesRemote(Lang.bind(this, function(names) {
             this._server_type = "daemon";
-            for (n in names[0]) {
+            for (let n in names[0]) {
                 let name = names[0][n];
                 if (name.search('com.transmissionbt.transmission') > -1
                    && (this._host == "localhost" || this._host == "127.0.0.1")) {
@@ -770,8 +783,8 @@ const TransmissionTorrentSmall = new Lang.Class({
         this.infos = new St.Label({text: ''});
         this.box.add(this.infos);
 
-        this.addActor(name_label);
-        this.addActor(this.box, {span: -1, align: St.Align.END});
+        this.actor.add(name_label);
+        this.actor.add(this.box, {span: -1, align: St.Align.END});
 
         this.buildInfo();
     },
@@ -784,14 +797,14 @@ const TransmissionTorrentSmall = new Lang.Class({
         let percentDone = (this._params.percentDone * 100).toFixed(1) + "%";
 
         if (ratio > 0)
-            infos.push('<span foreground="#aaa" size="xx-small">' + _('Ratio %s').format(ratio) + '</span>');
+            infos.push('<span foreground="#aaa" size="x-small">' + _('Ratio %s').format(ratio) + '</span>');
         if (this._params.rateDownload > 0)
             infos.push('<span foreground="#97EE4D"><b>%s</b> %s/s</span>'.format(downArrow,
                                                                                  rateDownload));
         if (this._params.rateUpload > 0)
             infos.push('<span foreground="#4DBFEE">%s %s/s</span>'.format(upArrow,
                                                                           rateUpload));
-        infos.push('<span foreground="#ccc" size="xx-small">%s</span>'.format(percentDone));
+        infos.push('<span foreground="#ccc" size="x-small">%s</span>'.format(percentDone));
 
         this._info = infos.join('<span foreground="#aaa">,</span> ');
         this.infos.clutter_text.set_markup(this._info);
@@ -843,7 +856,7 @@ const TransmissionTorrent = new Lang.Class({
                                                  reactive: false});
         this._progress_bar.height = 10;
         this._progress_bar.connect('repaint', Lang.bind(this, this._draw));
-        this.addActor(this._progress_bar);
+        this.actor.add(this._progress_bar);
 
         this._error_info = new PopupMenu.PopupMenuItem(this._infos.error,
                                                        {reactive: false,
@@ -1104,11 +1117,11 @@ const TorrentName = new Lang.Class({
         this.box = new St.BoxLayout({vertical: false,
                                      style_class: 'torrent-controls'});
 
-        let name_label = new St.Label({text: params.name});
-        name_label.set_style('max-width: 350px');
+        let name_label = new St.Label({text: params.name,
+                                       style_class: 'torrent-name-text'});
 
-        this.addActor(name_label);
-        this.addActor(this.box, {span: -1, align: St.Align.END});
+        this.actor.add(name_label);
+        this.actor.add(this.box, {expand: true, x_fill: false, x_align: St.Align.END});
 
         this.updateButtons();
     },
@@ -1161,7 +1174,7 @@ const TorrentsControls = new Lang.Class({
     Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function () {
-        this.parent({reactive: false});
+        this.parent({reactive: false, style_class: 'torrents-top-controls'});
 
         this._old_info = "";
         this.hover = false;
@@ -1173,7 +1186,7 @@ const TorrentsControls = new Lang.Class({
 
         this.ctrl_btns = new St.BoxLayout({vertical: false,
                                            style_class: 'torrents-controls'});
-        this.ctrl_info = new St.Label({style_class: 'torrents-controls-text', 
+        this.ctrl_info = new St.Label({style_class: 'torrents-controls-text',
                                        text: ''});
         this.ctrl_info.add_style_pseudo_class("inactive");
 
@@ -1186,7 +1199,7 @@ const TorrentsControls = new Lang.Class({
 
         this.vbox.add(this.ctrl_box, {expand: true, span: -1});
 
-        this.addActor(this.vbox, {expand: true, span: -1});
+        this.actor.add(this.vbox, {expand: true, span: -1});
     },
 
     setInfo: function(text) {
@@ -1379,43 +1392,43 @@ const ControlButton = new Lang.Class({
     }
 });
 
-const TorrentsFilters = new Lang.Class({
-    Name: 'TorrentsFilters',
-    Extends: PopupMenu.PopupBaseMenuItem,
+const TorrentsFilter = new Lang.Class({
+    Name: 'TorrentFilter',
+    Extends: PopupMenu.PopupMenuItem,
 
-    _init: function() {
-        this.parent({reactive: false, style_class: 'status-chooser'});
-
-        this._combo = new PopupMenu.PopupComboBoxMenuItem(
-                                        {style_class: 'status-chooser-combo'});
-        let item;
-        item = new PopupMenu.PopupMenuItem(_("All"));
-        this._combo.addMenuItem(item, StatusFilter.ALL);
-        item = new PopupMenu.PopupMenuItem(_("Active"));
-        this._combo.addMenuItem(item, StatusFilter.ACTIVE);
-        item = new PopupMenu.PopupMenuItem(_("Downloading"));
-        this._combo.addMenuItem(item, StatusFilter.DOWNLOADING);
-        item = new PopupMenu.PopupMenuItem(_("Seeding"));
-        this._combo.addMenuItem(item, StatusFilter.SEEDING);
-        item = new PopupMenu.PopupMenuItem(_("Paused"));
-        this._combo.addMenuItem(item, StatusFilter.PAUSED);
-        item = new PopupMenu.PopupMenuItem(_("Finished"));
-        this._combo.addMenuItem(item, StatusFilter.FINISHED);
-
-        this._combo.setActiveItem(gsettings.get_int(TDAEMON_LATEST_FILTER));
-        this._combo.setSensitive(6);
-
-        this._combo.connect('active-item-changed',
-                            Lang.bind(this, this.filterByState));
-
-        this.addActor(this._combo.actor);
-
+    _init: function(state_id) {
+      this.state_id = state_id;
+      this.parent(StatusFilterLabels[state_id]);
     },
 
-    filterByState: function() {
+    activate: function() {
+      log(this.state_id);
+      this._delegate.filterByState(this.state_id)
+      this._delegate.menu.close();
+    }
+});
+
+const TorrentsFilters = new Lang.Class({
+    Name: 'TorrentsFilters',
+    Extends: PopupMenu.PopupSubMenuMenuItem,
+
+    _init: function() {
+        this.state_id = gsettings.get_int(TDAEMON_LATEST_FILTER);
+        this.parent(StatusFilterLabels[this.state_id]);
+
+        for (let state in StatusFilter) {
+            let item = new TorrentsFilter(StatusFilter[state]);
+            item._delegate = this;
+            this.menu.addMenuItem(item);
+        }
+    },
+
+    filterByState: function(state_id) {
+        if (!state_id && state_id != 0)
+            state_id = this.state_id;
         for (let id in transmissionDaemonIndicator._torrents) {
             let torrent = transmissionDaemonIndicator._torrents[id];
-            switch (this._combo._activeItemPos) {
+            switch (state_id) {
                 case StatusFilter.ALL:
                     torrent.show();
                     break;
@@ -1456,7 +1469,9 @@ const TorrentsFilters = new Lang.Class({
                     break;
             }
         }
-        gsettings.set_int(TDAEMON_LATEST_FILTER, this._combo._activeItemPos);
+        gsettings.set_int(TDAEMON_LATEST_FILTER, state_id);
+        this.state_id = state_id;
+        this.label.text = StatusFilterLabels[state_id];
     },
 
     hide: function() {
@@ -1474,9 +1489,6 @@ const TorrentsMenu = new Lang.Class({
 
     _init: function(sourceActor) {
         this.parent(sourceActor, 0.0, St.Side.TOP);
-
-        // override base style
-        this._boxWrapper.set_style('min-width: 450px');
 
         this.controls = new TorrentsTopControls();
         this.filters = new TorrentsFilters();
@@ -1507,16 +1519,12 @@ const TorrentsMenu = new Lang.Class({
     addMenuItem: function(menuItem, position) {
         if (menuItem instanceof TransmissionTorrent || menuItem instanceof TransmissionTorrentSmall) {
             this._scrollBox.add(menuItem.actor);
-            this._connectSubMenuSignals(menuItem, menuItem);
             menuItem._closingId = this.connect('open-state-changed',
                 function(self, open) {
                     if (!open)
                         menuItem.close(false);
                 });
             menuItem.connect('destroy', Lang.bind(this, function() {
-                menuItem.disconnect(menuItem._subMenuActivateId);
-                menuItem.disconnect(menuItem._subMenuActiveChangeId);
-
                 this.length--;
             }));
         }

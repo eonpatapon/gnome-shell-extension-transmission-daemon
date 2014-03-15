@@ -16,16 +16,24 @@
 
 .torrent-name {
     font-weight: bold;
-    padding: .5em 25px 3px 25px;
+    padding: .5em 0px 3px 10px;
+}
+
+.torrent-name-text {
+    max-width: 350px;
 }
 
 .torrent-infos {
     font-size: 80%;
-    padding: 0 25px 0 25px;
+    padding: 0 0 0 13px;
 }
 
 .size-info {
     padding-bottom: .5em;
+}
+
+.torrents-top-controls {
+    min-width: 450px;
 }
 
 .torrents-controls {
