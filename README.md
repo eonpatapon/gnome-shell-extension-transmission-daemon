@@ -1,6 +1,6 @@
 # gnome-shell-extension-transmission-daemon
 
-Monitor a remote transmission-daemon or transmission-client using its RPC interface.
+Monitor a remote transmission-daemon or transmission GTK app using its RPC interface.
 
 This extension supports Gnome Shell DE, from version 3.4 up to 3.10
 
@@ -27,7 +27,7 @@ Restart the shell and then enable the extension.
 
 ## Configuration
 
-### Transmission daemon
+### With the transmission daemon
 
 Enable the RPC interface in ``/etc/transmission-daemon/settings.json``.
 
@@ -35,6 +35,6 @@ See https://trac.transmissionbt.com/wiki/EditConfigFiles for complete documentat
 
 Set the host/port settings in the extension configuration.
 
-### Transmission client
+### With the GTK transmission application
 
 In the preferences enable the web client.
