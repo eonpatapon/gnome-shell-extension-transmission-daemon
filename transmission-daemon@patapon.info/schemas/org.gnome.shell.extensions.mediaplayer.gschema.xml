@@ -30,6 +30,11 @@
         <summary>RPC Url</summary>
         <description>RPC Url</description>
     </key>
+    <key type="b" name="ssl">
+        <default>false</default>
+        <summary>Use SSL</summary>
+        <description>Use SSL</description>
+    </key>
     <key type="b" name="stats-torrents">
         <default>true</default>
         <summary>Show number of torrents</summary>

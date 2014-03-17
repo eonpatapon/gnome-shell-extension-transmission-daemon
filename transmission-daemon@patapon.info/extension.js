@@ -99,6 +99,7 @@ const TDAEMON_PORT_KEY = 'port';
 const TDAEMON_USER_KEY = 'user';
 const TDAEMON_PASSWORD_KEY = 'password';
 const TDAEMON_RPC_URL_KEY = 'url';
+const TDAEMON_SSL_KEY = 'ssl';
 const TDAEMON_STATS_NB_TORRENTS_KEY = 'stats-torrents';
 const TDAEMON_STATS_ICONS_KEY = 'stats-icons';
 const TDAEMON_STATS_NUMERIC_KEY = 'stats-numeric';
@@ -142,10 +143,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
         let host = gsettings.get_string(TDAEMON_HOST_KEY);
         let port = gsettings.get_int(TDAEMON_PORT_KEY);
         let rpc_url = gsettings.get_string(TDAEMON_RPC_URL_KEY);
-        if (port == 443)
-            this._url = 'https://%s%srpc'.format(host, rpc_url);
-        else
-            this._url = 'http://%s:%s%srpc'.format(host, port.toString(), rpc_url);
+        let method = gsettings.get_boolean(TDAEMON_SSL_KEY) ? "https" : "http";
+        this._url = '%s://%s:%s%srpc'.format(method, host, port.toString(), rpc_url);
     },
 
     authenticate: function(session, message, auth, retrying) {

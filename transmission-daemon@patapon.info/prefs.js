@@ -32,6 +32,7 @@ function init() {
     settings = {
         host: {label: _("Hostname"), help: _('Hostname or IP where Transmission is running'), type: 's'},
         port: {label: _("Port"), help: _('Default is 9091'), type: 'i'},
+        ssl: {label: _("Use SSL ?"), type: 'b'},
         user: {label: _("Username"), help: _('Username to authenticate to Transmission (optional)'), type: 's'},
         password: {label: _("Password"), help: _('Password to authenticate to Transmission (optional)'), type: 's', mode: 'passwd'},
         always_show: {label: _('Always show the indicator'), help: _('Show the indicator even if Transmission is not running'), type: 'b'},
