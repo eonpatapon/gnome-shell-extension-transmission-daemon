@@ -520,11 +520,12 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     checkServer: function() {
-        const DBusIface = <interface name="org.freedesktop.DBus">
-        <method name="ListNames">
-            <arg type="as" direction="out" />
-        </method>
-        </interface>;
+        const DBusIface = '<node>\
+            <interface name="org.freedesktop.DBus">\
+                <method name="ListNames">\
+                    <arg type="as" direction="out" />\
+                </method>\
+            </interface></node>';
         const DBusProxy = Gio.DBusProxy.makeProxyWrapper(DBusIface);
         let proxy = new DBusProxy(Gio.DBus.session, 'org.freedesktop.DBus',
                                   '/org/freedesktop/DBus');
