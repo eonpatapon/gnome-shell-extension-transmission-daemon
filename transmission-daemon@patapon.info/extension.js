@@ -683,10 +683,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     launchPrefs: function() {
-        let appSys = Shell.AppSystem.get_default();
-        let app = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
-        app.launch(global.display.get_current_time_roundtrip(),
-                   ['extension:///transmission-daemon@patapon.info'], -1, null);
+        Main.shellDBusService._extensionsService.LaunchExtensionPrefs('transmission-daemon@patapon.info');
         this.menu.close();
     },
 
