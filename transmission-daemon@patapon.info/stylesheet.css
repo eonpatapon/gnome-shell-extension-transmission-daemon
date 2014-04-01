@@ -32,16 +32,12 @@
     padding-bottom: .5em;
 }
 
-.torrents-top-controls {
+.torrents-controls {
     min-width: 450px;
 }
 
-.torrents-controls {
+.torrents-controls-btn {
     spacing: 5px;
-}
-
-.torrents-controls-text:inactive {
-    height: 0px;
 }
 
 .torrent-controls {

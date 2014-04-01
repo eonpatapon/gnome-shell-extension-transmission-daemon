@@ -1171,7 +1171,8 @@ const TorrentsControls = new Lang.Class({
     Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function () {
-        this.parent({reactive: false, style_class: 'torrents-top-controls'});
+        this.parent({reactive: false, style_class: 'torrents-controls'});
+        this.actor.hide()
 
         this._old_info = "";
         this.hover = false;
@@ -1182,11 +1183,9 @@ const TorrentsControls = new Lang.Class({
         this.ctrl_box = new St.BoxLayout({vertical: false});
 
         this.ctrl_btns = new St.BoxLayout({vertical: false,
-                                           style_class: 'torrents-controls'});
+                                           style_class: 'torrents-controls-btn'});
         this.ctrl_info = new St.Label({style_class: 'torrents-controls-text',
                                        text: ''});
-        this.ctrl_info.add_style_pseudo_class("inactive");
-
 
         this.ctrl_box.add(this.ctrl_btns);
         this.ctrl_box.add(this.ctrl_info, {expand: true,
@@ -1210,7 +1209,7 @@ const TorrentsControls = new Lang.Class({
                 this.ctrl_btns.insert_child_at_index(button.actor, position);
             else
                 this.ctrl_btns.add_actor(button.actor);
-            this.ctrl_info.remove_style_pseudo_class("inactive");
+            this.actor.show()
             button.actor.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
@@ -1230,13 +1229,15 @@ const TorrentsControls = new Lang.Class({
             button_actor = button.actor;
         if (this.ctrl_btns.contains(button_actor))
             this.ctrl_btns.remove_actor(button_actor);
+        if (this.ctrl_btns.get_children().length == 0)
+          this.actor.hide();
     },
 
     removeControls: function() {
         this.ctrl_btns.get_children().forEach(Lang.bind(this, function(b) {
             this.removeControl(b);
         }));
-        this.ctrl_info.add_style_pseudo_class("inactive");
+        this.actor.hide();
     }
 });
 
