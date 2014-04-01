@@ -49,7 +49,7 @@ function buildPrefsWidget() {
                             margin: 20, margin_top: 10 });
     let hbox;
 
-    for (setting in settings) {
+    for (let setting in settings) {
         if (settings[setting].type == 's')
             hbox = createStringSetting(setting);
         if (settings[setting].type == "i")
