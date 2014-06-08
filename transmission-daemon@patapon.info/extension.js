@@ -1,4 +1,9 @@
 /* -*- mode: js2; js2-basic-offset: 4; indent-tabs-mode: nil -*- */
+/* jshint esnext: true */
+/* global imports: false */
+/* global escape: false */
+/* global log: false */
+/* global global: false */
 /**
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -13,6 +18,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
+
+'use strict';
 
 const Clutter = imports.gi.Clutter;
 const Main = imports.ui.main;
@@ -59,21 +66,21 @@ let TransmissionStatus = {
     DOWNLOAD: 4,
     SEED_WAIT: 5,
     SEED: 6
-}
+};
 
 const TransmissionError = {
     NONE: 0,
     TRACKER_WARNING: 1,
     TRACKER_ERROR: 2,
     LOCAL_ERROR: 3
-}
+};
 
 const ErrorType = {
     NO_ERROR: 0,
     CONNECTION_ERROR: 1,
     AUTHENTICATION_ERROR: 2,
     CONNECTING: 3
-}
+};
 
 const StatusFilter = {
     ALL: 0,
@@ -82,7 +89,7 @@ const StatusFilter = {
     SEEDING: 3,
     PAUSED: 4,
     FINISHED: 5
-}
+};
 
 const StatusFilterLabels = {
     0: _('All'),
@@ -91,7 +98,7 @@ const StatusFilterLabels = {
     3: _('Seeding'),
     4: _('Paused'),
     5: _('Stopped')
-}
+};
 
 const TDAEMON_SETTINGS_SCHEMA = 'org.gnome.shell.extensions.transmission-daemon';
 const TDAEMON_HOST_KEY = 'host';
@@ -110,14 +117,18 @@ const TDAEMON_TORRENTS_DISPLAY = 'torrents-display';
 const TorrentDisplayClass = {
     TransmissionTorrent: 0,
     TransmissionTorrentSmall: 1
-}
+};
+
+let gsettings;
+let transmissionDaemonMonitor;
+let transmissionDaemonIndicator;
 
 if (!_httpSession) {
     const _httpSession = new Soup.SessionAsync();
     _httpSession.timeout = 10;
 }
 
-if (Soup.Session.prototype.add_feature != null)
+if (Soup.Session.prototype.add_feature !== null)
         Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
 
 const TransmissionDaemonMonitor = new Lang.Class({
@@ -201,11 +212,11 @@ const TransmissionDaemonMonitor = new Lang.Class({
                          "webseedsSendingToUs", "uploadRatio", "eta"]
             }
         };
-        if (this._torrents != false)
+        if (this._torrents !== false)
             params.arguments.ids = "recently-active";
         this.sendPost(params, this.processList);
         if (this._timers.list)
-            delete this._timers.list
+            delete this._timers.list;
     },
 
     retrieveStats: function() {
@@ -214,7 +225,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
         };
         this.sendPost(params, this.processStats);
         if (this._timers.stats)
-            delete this._timers.stats
+            delete this._timers.stats;
     },
 
     retrieveSession: function() {
@@ -223,7 +234,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
         };
         this.sendPost(params, this.processSession);
         if (this._timers.session)
-            delete this._timers.session
+            delete this._timers.session;
     },
 
     torrentAction: function(action, torrent_id) {
@@ -329,7 +340,7 @@ const TransmissionDaemonMonitor = new Lang.Class({
                     DOWNLOAD: 4,
                     SEED: 8,
                     STOPPED: 16
-                }
+                };
             }
 
             if (!this._timers.session) {
@@ -435,7 +446,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
         this.actor.add_actor(this._indicatorBox);
         this.actor.add_style_class_name('panel-status-button');
 
-        let menu = new TorrentsMenu(this.actor)
+        let menu = new TorrentsMenu(this.actor);
         menu._delegate = this;
         this.setMenu(menu);
 
@@ -520,12 +531,12 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     checkServer: function() {
-        const DBusIface = '<node>\
-            <interface name="org.freedesktop.DBus">\
-                <method name="ListNames">\
-                    <arg type="as" direction="out" />\
-                </method>\
-            </interface></node>';
+        const DBusIface = '<node>' +
+            '<interface name="org.freedesktop.DBus">' +
+                '<method name="ListNames">' +
+                    '<arg type="as" direction="out" />' +
+                '</method>' +
+            '</interface></node>';
         const DBusProxy = Gio.DBusProxy.makeProxyWrapper(DBusIface);
         let proxy = new DBusProxy(Gio.DBus.session, 'org.freedesktop.DBus',
                                   '/org/freedesktop/DBus');
@@ -533,8 +544,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
             this._server_type = "daemon";
             for (let n in names[0]) {
                 let name = names[0][n];
-                if (name.search('com.transmissionbt.transmission') > -1
-                   && (this._host == "localhost" || this._host == "127.0.0.1")) {
+                if (name.search('com.transmissionbt.transmission') > -1 &&
+                      (this._host == "localhost" || this._host == "127.0.0.1")) {
                     this._server_type = "client";
                     break;
                 }
@@ -728,7 +739,7 @@ const TransmissionDaemonIndicator = new Lang.Class({
     updateTorrents: function() {
         let torrents = this._monitor.getList();
         for (let i in torrents)
-            this.updateTorrent(torrents[i])
+            this.updateTorrent(torrents[i]);
     },
 
     updateTorrent: function(torrent) {
@@ -739,8 +750,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     addTorrent: function(torrent, visible) {
-        let klass = TorrentDisplayClasses[gsettings.get_enum(TDAEMON_TORRENTS_DISPLAY)]
-        this._torrents[torrent.id] = new klass(torrent);
+        let DisplayClass = TorrentDisplayClasses[gsettings.get_enum(TDAEMON_TORRENTS_DISPLAY)];
+        this._torrents[torrent.id] = new DisplayClass(torrent);
         if (visible === false)
             this._torrents[torrent.id].hide();
         this.menu.addMenuItem(this._torrents[torrent.id]);
@@ -787,7 +798,7 @@ const TransmissionTorrentSmall = new Lang.Class({
     },
 
     buildInfo: function() {
-        let infos = new Array();
+        let infos = [];
         let rateDownload = readableSize(this._params.rateDownload);
         let rateUpload = readableSize(this._params.rateUpload);
         let ratio = this._params.uploadRatio.toFixed(1);
@@ -877,6 +888,7 @@ const TransmissionTorrent = new Lang.Class({
                     return _("Seeding complete");
                 else
                     return _("Paused");
+                break;
             case TransmissionStatus.CHECK_WAIT:
                 return _("Queued for verification");
             case TransmissionStatus.CHECK:
@@ -936,7 +948,7 @@ const TransmissionTorrent = new Lang.Class({
                                                 upArrow,
                                                 rateUpload);
                 else
-                    this._infos.seeds = this.getStateString(TransmissionStatus.DOWNLOAD_WAIT)
+                    this._infos.seeds = this.getStateString(TransmissionStatus.DOWNLOAD_WAIT);
 
                 // Format ETA string
                 if (eta < 0 || eta >= (999*60*60))
@@ -1005,7 +1017,7 @@ const TransmissionTorrent = new Lang.Class({
         let cr = this._progress_bar.get_context();
 
         let color = barColor;
-        let border_color = barBorderColor
+        let border_color = barBorderColor;
         // Background
         cr.rectangle(0, 0, width, height);
         Clutter.cairo_set_source_color(cr, color);
@@ -1100,6 +1112,8 @@ const TransmissionTorrent = new Lang.Class({
     }
 });
 
+const TorrentDisplayClasses = [TransmissionTorrent, TransmissionTorrentSmall];
+
 const TorrentName = new Lang.Class({
     Name: 'TorrentName',
     Extends: PopupMenu.PopupBaseMenuItem,
@@ -1172,7 +1186,7 @@ const TorrentsControls = new Lang.Class({
 
     _init: function () {
         this.parent({reactive: false, style_class: 'torrents-controls'});
-        this.actor.hide()
+        this.actor.hide();
 
         this._old_info = "";
         this.hover = false;
@@ -1209,7 +1223,7 @@ const TorrentsControls = new Lang.Class({
                 this.ctrl_btns.insert_child_at_index(button.actor, position);
             else
                 this.ctrl_btns.add_actor(button.actor);
-            this.actor.show()
+            this.actor.show();
             button.actor.connect('notify::hover', Lang.bind(this, function(button) {
                 this.hover = button.hover;
                 if (this.hover) {
@@ -1229,7 +1243,7 @@ const TorrentsControls = new Lang.Class({
             button_actor = button.actor;
         if (this.ctrl_btns.contains(button_actor))
             this.ctrl_btns.remove_actor(button_actor);
-        if (this.ctrl_btns.get_children().length == 0)
+        if (this.ctrl_btns.get_children().length === 0)
           this.actor.hide();
     },
 
@@ -1321,7 +1335,7 @@ const TorrentsBottomControls = new Lang.Class({
     },
 
     toggleTurtleMode: function(button, state) {
-        if (state == true || state == false)
+        if (state === true || state === false)
             this._turtle_state = state;
         else {
             this._turtle_state = !this._turtle_state;
@@ -1335,7 +1349,7 @@ const TorrentsBottomControls = new Lang.Class({
     },
 
     toggleDisplayMode: function(button, state) {
-        if (state == true || state == false)
+        if (state === true || state === false)
             this._display_state = state;
         else
             this._display_state = !this._display_state;
@@ -1349,7 +1363,7 @@ const TorrentsBottomControls = new Lang.Class({
             gsettings.set_enum(TDAEMON_TORRENTS_DISPLAY, TorrentDisplayClass.TransmissionTorrent);
         }
 
-        if (state != true && state != false) {
+        if (state !== true && state !== false) {
             let indicator = this._delegate._delegate;
             indicator.changeTorrentClass();
         }
@@ -1400,8 +1414,7 @@ const TorrentsFilter = new Lang.Class({
     },
 
     activate: function() {
-      log(this.state_id);
-      this._delegate.filterByState(this.state_id)
+      this._delegate.filterByState(this.state_id);
       this._delegate.menu.close();
     }
 });
@@ -1422,7 +1435,7 @@ const TorrentsFilters = new Lang.Class({
     },
 
     filterByState: function(state_id) {
-        if (!state_id && state_id != 0)
+        if (!state_id && state_id !== 0)
             state_id = this.state_id;
         for (let id in transmissionDaemonIndicator._torrents) {
             let torrent = transmissionDaemonIndicator._torrents[id];
@@ -1537,11 +1550,6 @@ const TorrentsMenu = new Lang.Class({
     }
 });
 
-const TorrentDisplayClasses = [TransmissionTorrent, TransmissionTorrentSmall];
-
-let gsettings;
-let transmissionDaemonMonitor;
-let transmissionDaemonIndicator;
 
 function init(extensionMeta) {
     gsettings = Lib.getSettings(Me);
