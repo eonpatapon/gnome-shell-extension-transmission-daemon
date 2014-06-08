@@ -644,12 +644,8 @@ const TransmissionDaemonIndicator = new Lang.Class({
     },
 
     launchWebUI: function() {
-        let appSys = Shell.AppSystem.get_default();
-        let app = appSys.lookup_app(
-            Gio.app_info_get_default_for_type('x-scheme-handler/http', false).get_id()
-        );
-        app.launch(global.display.get_current_time_roundtrip(),
-                   [this._url], -1, null);
+        Gio.app_info_launch_default_for_uri(this._url,
+                                            global.create_app_launch_context(0, -1));
         this.menu.close();
     },
 
