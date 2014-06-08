@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-transmission-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-13 11:22+0100\n"
-"PO-Revision-Date: 2013-01-13 11:22+0100\n"
+"POT-Creation-Date: 2014-06-08 12:21+0100\n"
+"PO-Revision-Date: 2014-06-08 12:25+0100\n"
 "Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -21,8 +21,199 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-SearchPath-0: ../../..\n"
+
+#: ../../../extension.js:95
+msgid "All"
+msgstr "Tous"
+
+#: ../../../extension.js:96
+msgid "Active"
+msgstr "Actifs"
+
+#: ../../../extension.js:97 ../../../extension.js:895
+msgid "Downloading"
+msgstr "En téléchargement"
+
+#: ../../../extension.js:98 ../../../extension.js:899
+msgid "Seeding"
+msgstr "En seeding"
+
+#: ../../../extension.js:99 ../../../extension.js:886
+msgid "Paused"
+msgstr "En pause"
+
+#: ../../../extension.js:100
+msgid "Stopped"
+msgstr "Arrêtés"
+
+#: ../../../extension.js:167
+msgid "Authentication failed"
+msgstr "L'autentification à échoué"
+
+#: ../../../extension.js:175
+msgid "Missing username or password"
+msgstr "Identifiant ou mot de passe manquant"
+
+#: ../../../extension.js:304
+#, python-format
+msgid "Can't access to %s"
+msgstr "Ne peut pas acceder à %s"
+
+#: ../../../extension.js:310
+msgid "Can't connect to Transmission"
+msgstr "Ne peut pas se connecter à Transmission"
+
+#: ../../../extension.js:412
+msgid "Pause all torrents"
+msgstr "Mettre tous les torrents en pause"
+
+#: ../../../extension.js:415
+msgid "Start all torrents"
+msgstr "Démarrer tous les torrents"
+
+#: ../../../extension.js:417
+msgid "Open Web UI"
+msgstr "Ouvrir l'interface Web"
+
+#: ../../../extension.js:419
+msgid "Open Transmission"
+msgstr "Ouvrir Transmission"
+
+#: ../../../extension.js:422
+msgid "Preferences"
+msgstr "Préférences"
+
+#: ../../../extension.js:425
+msgid "Add torrent"
+msgstr "Ajouter un torrent"
+
+#: ../../../extension.js:428
+msgid "Toggle turtle mode"
+msgstr "Activer/désactiver le mode tortue"
+
+#: ../../../extension.js:431
+msgid "Toggle display mode"
+msgstr "Activer/désactiver le mode compact"
+
+#: ../../../extension.js:598
+msgid "No torrent"
+msgstr "Aucun torrent"
+
+#: ../../../extension.js:804
+#, python-format
+msgid "Ratio %s"
+msgstr "Ratio %s"
+
+#: ../../../extension.js:884
+msgid "Seeding complete"
+msgstr "Seeding terminé"
+
+#: ../../../extension.js:889
+msgid "Queued for verification"
+msgstr "En attente de vérification"
+
+#: ../../../extension.js:891
+msgid "Verifying local data"
+msgstr "Vérification des données locales"
+
+#: ../../../extension.js:893
+msgid "Queued for download"
+msgstr "En attente de téléchargement"
+
+#: ../../../extension.js:897
+msgid "Queued for seeding"
+msgstr "En attente de seeding"
+
+#: ../../../extension.js:925 ../../../extension.js:971
+#, python-format
+msgid "%s, uploaded %s (Ratio %s)"
+msgstr "%s, envoyé %s (Ratio %s)"
+
+#: ../../../extension.js:931
+#, python-format
+msgid "%s of %s (%s)"
+msgstr "%s de %s (%s)"
+
+#: ../../../extension.js:939
+#, python-format
+msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
+msgstr "Téléchargement de %s sur %s pairs - %s %s/s %s %s/s"
+
+#: ../../../extension.js:951
+msgid "remaining time unknown"
+msgstr "temps restant inconnu"
+
+#: ../../../extension.js:953
+#, python-format
+msgid "%s remaining"
+msgstr "%s restant"
+
+#: ../../../extension.js:955
+#, python-format
+msgid "%s of %s (%s) - %s"
+msgstr "%s sur %s (%s) - %s"
+
+#: ../../../extension.js:963
+#, python-format
+msgid "Seeding to %s of %s peers - %s %s/s"
+msgstr "Seeding à %s sur %s pairs - %s %s/s"
+
+#: ../../../extension.js:981
+#, python-format
+msgid "Tracker returned a warning: %s"
+msgstr "Le tracker a renvoyé un avertissement: %s"
+
+#: ../../../extension.js:984
+#, python-format
+msgid "Tracker returned an error: %s"
+msgstr "Le tracker a renvoyé une erreur: %s"
+
+#: ../../../extension.js:987
+#, python-format
+msgid "Error: %s"
+msgstr "Erreur: %s"
+
+#: ../../../extension.js:1265
+msgid "Torrent URL or Magnet link"
+msgstr "URL du fichier torrent ou lien magnet"
+
+#: ../../../extension.js:1274
+msgid "Connecting..."
+msgstr "Connexion..."
+
+#: ../../../extension.js:1591
+msgid "days"
+msgstr "jours"
+
+#: ../../../extension.js:1591
+msgid "day"
+msgstr "jour"
+
+#: ../../../extension.js:1592
+msgid "hours"
+msgstr "heures"
+
+#: ../../../extension.js:1592
+msgid "hour"
+msgstr "heure"
+
+#: ../../../extension.js:1593
+msgid "minutes"
+msgstr "minutes"
+
+#: ../../../extension.js:1593
+msgid "minute"
+msgstr "minute"
+
+#: ../../../extension.js:1594
+msgid "seconds"
+msgstr "secondes"
+
+#: ../../../extension.js:1594
+msgid "second"
+msgstr "seconde"
 
 #: ../../../prefs.js:33
 msgid "Hostname"
@@ -41,228 +232,44 @@ msgid "Default is 9091"
 msgstr "Le port par défaut est 9091"
 
 #: ../../../prefs.js:35
+msgid "Use SSL ?"
+msgstr "Utiliser SSL ?"
+
+#: ../../../prefs.js:36
 msgid "Username"
 msgstr "Utilisateur"
 
-#: ../../../prefs.js:35
+#: ../../../prefs.js:36
 msgid "Username to authenticate to Transmission (optional)"
 msgstr "Le nom d'utilisateur pour s'authentifier à Transmission (optionnel)"
 
-#: ../../../prefs.js:36
+#: ../../../prefs.js:37
 msgid "Password"
 msgstr "Mot de passe"
 
-#: ../../../prefs.js:36
+#: ../../../prefs.js:37
 msgid "Password to authenticate to Transmission (optional)"
 msgstr "Le mot de passe pour s'authentifier à Transmission"
 
-#: ../../../prefs.js:37
+#: ../../../prefs.js:38
 msgid "Always show the indicator"
 msgstr "Toujours afficher l'indicateur"
 
-#: ../../../prefs.js:37
+#: ../../../prefs.js:38
 msgid "Show the indicator even if Transmission is not running"
 msgstr "Affiche l'indicateur même si Transmission n'est pas lancé"
 
-#: ../../../prefs.js:38
+#: ../../../prefs.js:39
 msgid "Show the number of torrents in the status bar"
 msgstr "Afficher le nombre de torrents dans la barre de statut"
 
-#: ../../../prefs.js:39
+#: ../../../prefs.js:40
 msgid "Show upload and download icons in the status bar"
 msgstr "Afficher les icones de téléchargement dans la barre de statut"
 
-#: ../../../prefs.js:40
+#: ../../../prefs.js:41
 msgid "Show upload and download speed in the status bar"
 msgstr "Afficher les vitesses de téléchargement dans la barre de statut"
 
-#: ../../../extension.js:148
-msgid "Authentication failed"
-msgstr "L'autentification à échoué"
-
-#: ../../../extension.js:156
-msgid "Missing username or password"
-msgstr "Identifiant ou mot de passe manquant"
-
-#: ../../../extension.js:285
-#, python-format
-msgid "Can't access to %s"
-msgstr "Ne peut pas acceder à %s"
-
-#: ../../../extension.js:291
-msgid "Can't connect to Transmission"
-msgstr "Ne peut pas se connecter à Transmission"
-
-#: ../../../extension.js:393
-msgid "Pause all torrents"
-msgstr "Mettre tous les torrents en pause"
-
-#: ../../../extension.js:396
-msgid "Start all torrents"
-msgstr "Démarrer tous les torrents"
-
-#: ../../../extension.js:398
-msgid "Open Web UI"
-msgstr "Ouvrir l'interface Web"
-
-#: ../../../extension.js:400
-msgid "Open Transmission"
-msgstr "Ouvrir Transmission"
-
-#: ../../../extension.js:403
-msgid "Preferences"
-msgstr "Préférences"
-
-#: ../../../extension.js:406
-msgid "Add torrent"
-msgstr "Ajouter un torrent"
-
-#: ../../../extension.js:409
-msgid "Toggle turtle mode"
-msgstr "Activer/désactiver le mode tortue"
-
-#: ../../../extension.js:412
-msgid "Toggle display mode"
-msgstr "Activer/désactiver le mode compact"
-
-#: ../../../extension.js:570
-msgid "No torrent"
-msgstr "Aucun torrent"
-
-#: ../../../extension.js:783
-#, python-format
-msgid "Ratio %s"
-msgstr "Ratio %s"
-
-#: ../../../extension.js:863
-msgid "Seeding complete"
-msgstr "Seeding terminé"
-
-#: ../../../extension.js:865 ../../../extension.js:1395
-msgid "Paused"
-msgstr "En pause"
-
-#: ../../../extension.js:867
-msgid "Queued for verification"
-msgstr "En attente de vérification"
-
-#: ../../../extension.js:869
-msgid "Verifying local data"
-msgstr "Vérification des données locales"
-
-#: ../../../extension.js:871
-msgid "Queued for download"
-msgstr "En attente de téléchargement"
-
-#: ../../../extension.js:873 ../../../extension.js:1391
-msgid "Downloading"
-msgstr "En téléchargement"
-
-#: ../../../extension.js:875
-msgid "Queued for seeding"
-msgstr "En attente de seeding"
-
-#: ../../../extension.js:877 ../../../extension.js:1393
-msgid "Seeding"
-msgstr "En seeding"
-
-#: ../../../extension.js:903 ../../../extension.js:949
-#, python-format
-msgid "%s, uploaded %s (Ratio %s)"
-msgstr "%s, envoyé %s (Ratio %s)"
-
-#: ../../../extension.js:909
-#, python-format
-msgid "%s of %s (%s)"
-msgstr "%s de %s (%s)"
-
-#: ../../../extension.js:917
-#, python-format
-msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
-msgstr "Téléchargement de %s sur %s pairs - %s %s/s %s %s/s"
-
-#: ../../../extension.js:929
-msgid "remaining time unknown"
-msgstr "temps restant inconnu"
-
-#: ../../../extension.js:931
-#, python-format
-msgid "%s remaining"
-msgstr "%s restant"
-
-#: ../../../extension.js:933
-#, python-format
-msgid "%s of %s (%s) - %s"
-msgstr "%s sur %s (%s) - %s"
-
-#: ../../../extension.js:941
-#, python-format
-msgid "Seeding to %s of %s peers - %s %s/s"
-msgstr "Seeding à %s sur %s pairs - %s %s/s"
-
-#: ../../../extension.js:959
-#, python-format
-msgid "Tracker returned a warning: %s"
-msgstr "Le tracker a renvoyé un avertissement: %s"
-
-#: ../../../extension.js:962
-#, python-format
-msgid "Tracker returned an error: %s"
-msgstr "Le tracker a renvoyé une erreur: %s"
-
-#: ../../../extension.js:965
-#, python-format
-msgid "Error: %s"
-msgstr "Erreur: %s"
-
-#: ../../../extension.js:1239
-msgid "Torrent URL or Magnet link"
-msgstr "URL du fichier torrent ou lien magnet"
-
-#: ../../../extension.js:1248
-msgid "Connecting..."
-msgstr "Connexion..."
-
-#: ../../../extension.js:1387
-msgid "All"
-msgstr "Tous"
-
-#: ../../../extension.js:1389
-msgid "Active"
-msgstr "Actifs"
-
-#: ../../../extension.js:1397
-msgid "Finished"
-msgstr "Terminés"
-
-#: ../../../extension.js:1576
-msgid "days"
-msgstr "jours"
-
-#: ../../../extension.js:1576
-msgid "day"
-msgstr "jour"
-
-#: ../../../extension.js:1577
-msgid "hours"
-msgstr "heures"
-
-#: ../../../extension.js:1577
-msgid "hour"
-msgstr "heure"
-
-#: ../../../extension.js:1578
-msgid "minutes"
-msgstr "minutes"
-
-#: ../../../extension.js:1578
-msgid "minute"
-msgstr "minute"
-
-#: ../../../extension.js:1579
-msgid "seconds"
-msgstr "secondes"
-
-#: ../../../extension.js:1579
-msgid "second"
-msgstr "seconde"
+#~ msgid "Finished"
+#~ msgstr "Terminés"
