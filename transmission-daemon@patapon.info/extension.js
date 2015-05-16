@@ -209,7 +209,8 @@ const TransmissionDaemonMonitor = new Lang.Class({
                          "peersSendingToUs", "rateDownload", "rateUpload",
                          "percentDone", "isFinished", "peersConnected",
                          "uploadedEver", "sizeWhenDone", "status",
-                         "webseedsSendingToUs", "uploadRatio", "eta"]
+                         "webseedsSendingToUs", "uploadRatio", "eta",
+                         "seedRatioLimit", "seedRatioMode"]
             }
         };
         if (this._torrents !== false)
@@ -1056,6 +1057,10 @@ const TransmissionTorrent = new Lang.Class({
         // Uploaded
         if (show_upload) {
             let ratio = this._params.uploadRatio;
+            if (this._params.seedRatioMode == 1)
+                ratio = ratio / this._params.seedRatioLimit;
+            if (this._params.seedRatioMode === 0 && transmissionDaemonMonitor._session['seedRatioLimited'])
+                ratio = ratio / transmissionDaemonMonitor._session['seedRatioLimit'];
             if (ratio > 1)
                 ratio = 1;
             let widthUploaded = Math.round(width * ratio);
