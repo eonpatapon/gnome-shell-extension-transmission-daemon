@@ -1383,7 +1383,7 @@ const ControlButton = new Lang.Class({
             icon_size: icon_size,
         });
 
-        this.actor = new St.Button({style_class: 'notification-icon-button',
+        this.actor = new St.Button({style_class: 'modal-dialog-button button',
                                     child: this.icon});
         this.actor._delegate = this;
         this.actor.connect('clicked', callback);
