@@ -1,0 +1,265 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-07 00:37-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: extension.js:95
+msgid "All"
+msgstr ""
+
+#: extension.js:96
+msgid "Active"
+msgstr ""
+
+#: extension.js:97 extension.js:896
+msgid "Downloading"
+msgstr ""
+
+#: extension.js:98 extension.js:900
+msgid "Seeding"
+msgstr ""
+
+#: extension.js:99 extension.js:887
+msgid "Paused"
+msgstr ""
+
+#: extension.js:100
+msgid "Stopped"
+msgstr ""
+
+#: extension.js:167
+msgid "Authentication failed"
+msgstr ""
+
+#: extension.js:175
+msgid "Missing username or password"
+msgstr ""
+
+#: extension.js:305
+#, javascript-format
+msgid "Can't access to %s"
+msgstr ""
+
+#: extension.js:311
+msgid "Can't connect to Transmission"
+msgstr ""
+
+#: extension.js:413
+msgid "Pause all torrents"
+msgstr ""
+
+#: extension.js:416
+msgid "Start all torrents"
+msgstr ""
+
+#: extension.js:418
+msgid "Open Web UI"
+msgstr ""
+
+#: extension.js:420
+msgid "Open Transmission"
+msgstr ""
+
+#: extension.js:423
+msgid "Preferences"
+msgstr ""
+
+#: extension.js:426
+msgid "Add torrent"
+msgstr ""
+
+#: extension.js:429
+msgid "Toggle turtle mode"
+msgstr ""
+
+#: extension.js:432
+msgid "Toggle display mode"
+msgstr ""
+
+#: extension.js:599
+msgid "No torrent"
+msgstr ""
+
+#: extension.js:805
+#, javascript-format
+msgid "Ratio %s"
+msgstr ""
+
+#: extension.js:885
+msgid "Seeding complete"
+msgstr ""
+
+#: extension.js:890
+msgid "Queued for verification"
+msgstr ""
+
+#: extension.js:892
+msgid "Verifying local data"
+msgstr ""
+
+#: extension.js:894
+msgid "Queued for download"
+msgstr ""
+
+#: extension.js:898
+msgid "Queued for seeding"
+msgstr ""
+
+#: extension.js:926 extension.js:972
+#, javascript-format
+msgid "%s, uploaded %s (Ratio %s)"
+msgstr ""
+
+#: extension.js:932
+#, javascript-format
+msgid "%s of %s (%s)"
+msgstr ""
+
+#: extension.js:940
+#, javascript-format
+msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
+msgstr ""
+
+#: extension.js:952
+msgid "remaining time unknown"
+msgstr ""
+
+#: extension.js:954
+#, javascript-format
+msgid "%s remaining"
+msgstr ""
+
+#: extension.js:956
+#, javascript-format
+msgid "%s of %s (%s) - %s"
+msgstr ""
+
+#: extension.js:964
+#, javascript-format
+msgid "Seeding to %s of %s peers - %s %s/s"
+msgstr ""
+
+#: extension.js:982
+#, javascript-format
+msgid "Tracker returned a warning: %s"
+msgstr ""
+
+#: extension.js:985
+#, javascript-format
+msgid "Tracker returned an error: %s"
+msgstr ""
+
+#: extension.js:988
+#, javascript-format
+msgid "Error: %s"
+msgstr ""
+
+#: extension.js:1270
+msgid "Torrent URL or Magnet link"
+msgstr ""
+
+#: extension.js:1279
+msgid "Connecting..."
+msgstr ""
+
+#: extension.js:1596
+msgid "days"
+msgstr ""
+
+#: extension.js:1596
+msgid "day"
+msgstr ""
+
+#: extension.js:1597
+msgid "hours"
+msgstr ""
+
+#: extension.js:1597
+msgid "hour"
+msgstr ""
+
+#: extension.js:1598
+msgid "minutes"
+msgstr ""
+
+#: extension.js:1598
+msgid "minute"
+msgstr ""
+
+#: extension.js:1599
+msgid "seconds"
+msgstr ""
+
+#: extension.js:1599
+msgid "second"
+msgstr ""
+
+#: prefs.js:33
+msgid "Hostname"
+msgstr ""
+
+#: prefs.js:33
+msgid "Hostname or IP where Transmission is running"
+msgstr ""
+
+#: prefs.js:34
+msgid "Port"
+msgstr ""
+
+#: prefs.js:34
+msgid "Default is 9091"
+msgstr ""
+
+#: prefs.js:35
+msgid "Use SSL ?"
+msgstr ""
+
+#: prefs.js:36
+msgid "Username"
+msgstr ""
+
+#: prefs.js:36
+msgid "Username to authenticate to Transmission (optional)"
+msgstr ""
+
+#: prefs.js:37
+msgid "Password"
+msgstr ""
+
+#: prefs.js:37
+msgid "Password to authenticate to Transmission (optional)"
+msgstr ""
+
+#: prefs.js:38
+msgid "Always show the indicator"
+msgstr ""
+
+#: prefs.js:38
+msgid "Show the indicator even if Transmission is not running"
+msgstr ""
+
+#: prefs.js:39
+msgid "Show the number of torrents in the status bar"
+msgstr ""
+
+#: prefs.js:40
+msgid "Show upload and download icons in the status bar"
+msgstr ""
+
+#: prefs.js:41
+msgid "Show upload and download speed in the status bar"
+msgstr ""
