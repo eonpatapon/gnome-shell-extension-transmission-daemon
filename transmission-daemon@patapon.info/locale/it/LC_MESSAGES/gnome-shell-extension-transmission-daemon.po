@@ -1,261 +1,267 @@
+# Updated by
+# Giovanni Santini <giovannisantini93@yahoo.it>, 2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-transmission-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-7 21:36+0100\n"
-"PO-Revision-Date: 2013-05-07 22:13+0100\n"
+"POT-Creation-Date: 2015-10-07 00:37-0300\n"
+"PO-Revision-Date: 2016-05-01 20:58+0200\n"
 "Last-Translator: Giovanni Santini <giovannisantini93@yahoo.it>\n"
-"Language-Team: Italian\n"
+"Language-Team: Italiano <>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: .\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.5\n"
-"X-Poedit-SearchPath-0: ../../..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
-#: ../../../prefs.js:33
-msgid "Hostname"
-msgstr "Nome del host"
-
-#: ../../../prefs.js:33
-msgid "Hostname or IP where Transmission is running"
-msgstr "Nome host o indirizzo IP della macchina che esegue Transmssion"
-
-#: ../../../prefs.js:34
-msgid "Port"
-msgstr "Porta"
-
-#: ../../../prefs.js:34
-msgid "Default is 9091"
-msgstr "La porta di default è 9097"
-
-#: ../../../prefs.js:35
-msgid "Username"
-msgstr "Nome utente"
-
-#: ../../../prefs.js:35
-msgid "Username to authenticate to Transmission (optional)"
-msgstr "Nome utente per autenticarsi in Transmission (opzionale)"
-
-#: ../../../prefs.js:36
-msgid "Password"
-msgstr "Passwork"
-
-#: ../../../prefs.js:36
-msgid "Password to authenticate to Transmission (optional)"
-msgstr "Password per autenticarsi in Transmission (opzionale)"
-
-#: ../../../prefs.js:37
-msgid "Always show the indicator"
-msgstr "Mostra sempre l'indicatore"
-
-#: ../../../prefs.js:37
-msgid "Show the indicator even if Transmission is not running"
-msgstr "Mostra l'indicatore anche se Transmission non è in esecuzione"
-
-#: ../../../prefs.js:38
-msgid "Show the number of torrents in the status bar"
-msgstr "Mostra il numero dei torrent nella status bar"
-
-#: ../../../prefs.js:39
-msgid "Show upload and download icons in the status bar"
-msgstr "Mostra icone di download e upload nella status bar"
-
-#: ../../../prefs.js:40
-msgid "Show upload and download speed in the status bar"
-msgstr "Mostra velocità di download e upload nella status bar"
-
-#: ../../../extension.js:148
-msgid "Authentication failed"
-msgstr "Autenticazione fallita"
-
-#: ../../../extension.js:156
-msgid "Missing username or password"
-msgstr "Nome utente o password assenti"
-
-#: ../../../extension.js:285
-#, python-format
-msgid "Can't access to %s"
-msgstr "Impossibile accedere a %s"
-
-#: ../../../extension.js:291
-msgid "Can't connect to Transmission"
-msgstr "Impossibile connettersi a Transmission"
-
-#: ../../../extension.js:393
-msgid "Pause all torrents"
-msgstr "Metti in pausa tutti i torrent"
-
-#: ../../../extension.js:396
-msgid "Start all torrents"
-msgstr "Avvia tutti i torrent"
-
-#: ../../../extension.js:398
-msgid "Open Web UI"
-msgstr "Apri l'interfaccia Web"
-
-#: ../../../extension.js:400
-msgid "Open Transmission"
-msgstr "Apri Transmission"
-
-#: ../../../extension.js:403
-msgid "Preferences"
-msgstr "Preferenze"
-
-#: ../../../extension.js:406
-msgid "Add torrent"
-msgstr "Aggiungi un torrent"
-
-#: ../../../extension.js:409
-msgid "Toggle turtle mode"
-msgstr "Attiva/disattiva limiti di velocità"
-
-#: ../../../extension.js:412
-msgid "Toggle display mode"
-msgstr "Attiva/disattiva modalità compatta"
-
-#: ../../../extension.js:570
-msgid "No torrent"
-msgstr "Nessun torrent"
-
-#: ../../../extension.js:783
-#, python-format
-msgid "Ratio %s"
-msgstr "Ratio %s"
-
-#: ../../../extension.js:863
-msgid "Seeding complete"
-msgstr "Seeding completato"
-
-#: ../../../extension.js:865 ../../../extension.js:1395
-msgid "Paused"
-msgstr "Pausa"
-
-#: ../../../extension.js:867
-msgid "Queued for verification"
-msgstr "In coda per verifica"
-
-#: ../../../extension.js:869
-msgid "Verifying local data"
-msgstr "Verifica dei dati locali"
-
-#: ../../../extension.js:871
-msgid "Queued for download"
-msgstr "In coda per il download"
-
-#: ../../../extension.js:873 ../../../extension.js:1391
-msgid "Downloading"
-msgstr "In download"
-
-#: ../../../extension.js:875
-msgid "Queued for seeding"
-msgstr "In coda per l'upload"
-
-#: ../../../extension.js:877 ../../../extension.js:1393
-msgid "Seeding"
-msgstr "In upload"
-
-#: ../../../extension.js:903 ../../../extension.js:949
-#, python-format
-msgid "%s, uploaded %s (Ratio %s)"
-msgstr "%s, in upload %s (Ratio %s)"
-
-#: ../../../extension.js:909
-#, python-format
-msgid "%s of %s (%s)"
-msgstr "%s di %s (%s)"
-
-#: ../../../extension.js:917
-#, python-format
-msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
-msgstr "Scaricando da %s su %s peers - %s %s/s %s %s/s"
-
-#: ../../../extension.js:929
-msgid "remaining time unknown"
-msgstr "Tempo rimanente sconosciuto"
-
-#: ../../../extension.js:931
-#, python-format
-msgid "%s remaining"
-msgstr "%s rimanenti"
-
-#: ../../../extension.js:933
-#, python-format
-msgid "%s of %s (%s) - %s"
-msgstr "%s di %s (%s) - %s"
-
-#: ../../../extension.js:941
-#, python-format
-msgid "Seeding to %s of %s peers - %s %s/s"
-msgstr "In upload con %s di %s peers - %s %s/s"
-
-#: ../../../extension.js:959
-#, python-format
-msgid "Tracker returned a warning: %s"
-msgstr "Il tracker ha mandato un avviso: %s"
-
-#: ../../../extension.js:962
-#, python-format
-msgid "Tracker returned an error: %s"
-msgstr "Il tracker ha segnalato un errore: %s"
-
-#: ../../../extension.js:965
-#, python-format
-msgid "Error: %s"
-msgstr "Errore: %s"
-
-#: ../../../extension.js:1239
-msgid "Torrent URL or Magnet link"
-msgstr "URL del torrent o Magnet Link"
-
-#: ../../../extension.js:1248
-msgid "Connecting..."
-msgstr "Connessione in corso..."
-
-#: ../../../extension.js:1387
+#: extension.js:95
 msgid "All"
 msgstr "Tutti"
 
-#: ../../../extension.js:1389
+#: extension.js:96
 msgid "Active"
 msgstr "Attivo"
 
-#: ../../../extension.js:1397
-msgid "Finished"
-msgstr "Completato"
+#: extension.js:97 extension.js:896
+msgid "Downloading"
+msgstr "In download"
 
-#: ../../../extension.js:1576
+#: extension.js:98 extension.js:900
+msgid "Seeding"
+msgstr "In upload"
+
+#: extension.js:99 extension.js:887
+msgid "Paused"
+msgstr "In pausa"
+
+#: extension.js:100
+msgid "Stopped"
+msgstr "Fermato"
+
+#: extension.js:167
+msgid "Authentication failed"
+msgstr "Autenticazione fallita"
+
+#: extension.js:175
+msgid "Missing username or password"
+msgstr "Nome utente o password assenti"
+
+#: extension.js:305
+#, javascript-format
+msgid "Can't access to %s"
+msgstr "Impossibile accedere a %s"
+
+#: extension.js:311
+msgid "Can't connect to Transmission"
+msgstr "Impossibile connettersi a Transmission"
+
+#: extension.js:413
+msgid "Pause all torrents"
+msgstr "Metti in pausa tutti i torrent"
+
+#: extension.js:416
+msgid "Start all torrents"
+msgstr "Avvia tutti i torrent"
+
+#: extension.js:418
+msgid "Open Web UI"
+msgstr "Apri l'interfaccia Web"
+
+#: extension.js:420
+msgid "Open Transmission"
+msgstr "Apri Transmission"
+
+#: extension.js:423
+msgid "Preferences"
+msgstr "Preferenze"
+
+#: extension.js:426
+msgid "Add torrent"
+msgstr "Aggiungi un torrent"
+
+#: extension.js:429
+msgid "Toggle turtle mode"
+msgstr "Attiva/disattiva limiti di velocità"
+
+#: extension.js:432
+msgid "Toggle display mode"
+msgstr "Attiva/disattiva modalità compatta"
+
+#: extension.js:599
+msgid "No torrent"
+msgstr "Nessun torrent"
+
+#: extension.js:805
+#, javascript-format
+msgid "Ratio %s"
+msgstr "Ratio %s"
+
+#: extension.js:885
+msgid "Seeding complete"
+msgstr "Seeding completato"
+
+#: extension.js:890
+msgid "Queued for verification"
+msgstr "In coda per verifica"
+
+#: extension.js:892
+msgid "Verifying local data"
+msgstr "Verifica dei dati locali"
+
+#: extension.js:894
+msgid "Queued for download"
+msgstr "In coda per il download"
+
+#: extension.js:898
+msgid "Queued for seeding"
+msgstr "In coda per l'upload"
+
+#: extension.js:926 extension.js:972
+#, javascript-format
+msgid "%s, uploaded %s (Ratio %s)"
+msgstr "%s, in upload %s (Ratio %s)"
+
+#: extension.js:932
+#, javascript-format
+msgid "%s of %s (%s)"
+msgstr "%s di %s (%s)"
+
+#: extension.js:940
+#, javascript-format
+msgid "Downloading from %s of %s peers - %s %s/s %s %s/s"
+msgstr "Scaricando da %s su %s peers - %s %s/s %s %s/s"
+
+#: extension.js:952
+msgid "remaining time unknown"
+msgstr "Tempo rimanente sconosciuto"
+
+#: extension.js:954
+#, javascript-format
+msgid "%s remaining"
+msgstr "%s rimanenti"
+
+#: extension.js:956
+#, javascript-format
+msgid "%s of %s (%s) - %s"
+msgstr "%s di %s (%s) - %s"
+
+#: extension.js:964
+#, javascript-format
+msgid "Seeding to %s of %s peers - %s %s/s"
+msgstr "In upload con %s di %s peers - %s %s/s"
+
+#: extension.js:982
+#, javascript-format
+msgid "Tracker returned a warning: %s"
+msgstr "Il tracker ha mandato un avviso: %s"
+
+#: extension.js:985
+#, javascript-format
+msgid "Tracker returned an error: %s"
+msgstr "Il tracker ha segnalato un errore: %s"
+
+#: extension.js:988
+#, javascript-format
+msgid "Error: %s"
+msgstr "Errore: %s"
+
+#: extension.js:1270
+msgid "Torrent URL or Magnet link"
+msgstr "URL del torrent o Magnet Link"
+
+#: extension.js:1279
+msgid "Connecting..."
+msgstr "Connessione in corso..."
+
+#: extension.js:1596
 msgid "days"
 msgstr "giorni"
 
-#: ../../../extension.js:1576
+#: extension.js:1596
 msgid "day"
 msgstr "giorno"
 
-#: ../../../extension.js:1577
+#: extension.js:1597
 msgid "hours"
 msgstr "ore"
 
-#: ../../../extension.js:1577
+#: extension.js:1597
 msgid "hour"
 msgstr "ora"
 
-#: ../../../extension.js:1578
+#: extension.js:1598
 msgid "minutes"
 msgstr "minuti"
 
-#: ../../../extension.js:1578
+#: extension.js:1598
 msgid "minute"
 msgstr "minuto"
 
-#: ../../../extension.js:1579
+#: extension.js:1599
 msgid "seconds"
 msgstr "secondi"
 
-#: ../../../extension.js:1579
+#: extension.js:1599
 msgid "second"
 msgstr "secondo"
+
+#: prefs.js:33
+msgid "Hostname"
+msgstr "Nome del host"
+
+#: prefs.js:33
+msgid "Hostname or IP where Transmission is running"
+msgstr "Nome host o indirizzo IP della macchina che esegue Transmssion"
+
+#: prefs.js:34
+msgid "Port"
+msgstr "Porta"
+
+#: prefs.js:34
+msgid "Default is 9091"
+msgstr "La porta di default è 9091"
+
+#: prefs.js:35
+msgid "Use SSL ?"
+msgstr "Utilizzare SSL ?"
+
+#: prefs.js:36
+msgid "Username"
+msgstr "Nome utente"
+
+#: prefs.js:36
+msgid "Username to authenticate to Transmission (optional)"
+msgstr "Nome utente per autenticarsi in Transmission (opzionale)"
+
+#: prefs.js:37
+msgid "Password"
+msgstr "Password"
+
+#: prefs.js:37
+msgid "Password to authenticate to Transmission (optional)"
+msgstr "Password per autenticarsi in Transmission (opzionale)"
+
+#: prefs.js:38
+msgid "Always show the indicator"
+msgstr "Mostra sempre l'indicatore"
+
+#: prefs.js:38
+msgid "Show the indicator even if Transmission is not running"
+msgstr "Mostra l'indicatore anche se Transmission non è in esecuzione"
+
+#: prefs.js:39
+msgid "Show the number of torrents in the status bar"
+msgstr "Mostra il numero dei torrent nella status bar"
+
+#: prefs.js:40
+msgid "Show upload and download icons in the status bar"
+msgstr "Mostra icone di download e upload nella status bar"
+
+#: prefs.js:41
+msgid "Show upload and download speed in the status bar"
+msgstr "Mostra velocità di download e upload nella status bar"
+
+#~ msgid "Finished"
+#~ msgstr "Completato"
