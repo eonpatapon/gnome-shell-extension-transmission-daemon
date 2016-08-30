@@ -774,7 +774,7 @@ const TransmissionTorrentSmall = new Lang.Class({
     Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function(params) {
-        this.parent({reactive: true,
+        this.parent({reactive: false,
                      style_class: 'torrent-small'});
 
         this._params = params;
@@ -849,12 +849,14 @@ const TransmissionTorrent = new Lang.Class({
 
         this._name = new TorrentName(this._params);
         this._name.actor.remove_style_class_name('popup-menu-item');
+        this._name.actor.remove_style_class_name('popup-inactive-menu-item');
         this.addMenuItem(this._name);
 
         this._seeds_info = new PopupMenu.PopupMenuItem(this._infos.seeds,
-                                                       {reactive: true,
+                                                       {reactive: false,
                                                         style_class: 'torrent-infos seeds-info'});
         this._seeds_info.actor.remove_style_class_name('popup-menu-item');
+        this._seeds_info.actor.remove_style_class_name('popup-inactive-menu-item');
         this.addMenuItem(this._seeds_info);
 
         this._progress_bar = new St.DrawingArea({style_class: 'progress-bar',
@@ -864,16 +866,18 @@ const TransmissionTorrent = new Lang.Class({
         this.actor.add(this._progress_bar);
 
         this._error_info = new PopupMenu.PopupMenuItem(this._infos.error,
-                                                       {reactive: true,
+                                                       {reactive: false,
                                                         style_class: 'torrent-infos error'});
         this._error_info.actor.remove_style_class_name('popup-menu-item');
+        this._error_info.actor.remove_style_class_name('popup-inactive-menu-item');
         this.addMenuItem(this._error_info);
         this._error_info.actor.hide();
 
         this._size_info = new PopupMenu.PopupMenuItem(this._infos.size,
-                                                      {reactive: true,
+                                                      {reactive: false,
                                                        style_class: 'torrent-infos size-info'});
         this._size_info.actor.remove_style_class_name('popup-menu-item');
+        this._size_info.actor.remove_style_class_name('popup-inactive-menu-item');
         this.addMenuItem(this._size_info);
 
     },
@@ -1008,15 +1012,18 @@ const TransmissionTorrent = new Lang.Class({
         let downloadBorderColor = themeNode.get_color('-download-border-color');
         let idleColor = themeNode.get_color('-idle-color');
         let idleBorderColor = themeNode.get_color('-idle-border-color');
+        let padding = 27;
 
         this._progress_bar.set_height(barHeight);
         let [width, height] = this._progress_bar.get_surface_size();
         let cr = this._progress_bar.get_context();
 
+        width = width - padding;
+
         let color = barColor;
         let border_color = barBorderColor;
         // Background
-        cr.rectangle(0, 0, width, height);
+        cr.rectangle(padding, 0, width, height);
         Clutter.cairo_set_source_color(cr, color);
         cr.fillPreserve();
         cr.setLineWidth(borderWidth);
@@ -1047,7 +1054,7 @@ const TransmissionTorrent = new Lang.Class({
                 break;
         }
         Clutter.cairo_set_source_color(cr, color);
-        cr.rectangle(0, 0, widthDownloaded, height);
+        cr.rectangle(27, 0, widthDownloaded, height);
         Clutter.cairo_set_source_color(cr, color);
         cr.fillPreserve();
         cr.setLineWidth(borderWidth);
@@ -1120,7 +1127,7 @@ const TorrentName = new Lang.Class({
     Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function (params) {
-        this.parent({reactive: true,
+        this.parent({reactive: false,
                      style_class: 'torrent-name'});
 
         this.id = params.id;
@@ -1186,7 +1193,7 @@ const TorrentsControls = new Lang.Class({
     Extends: PopupMenu.PopupBaseMenuItem,
 
     _init: function () {
-        this.parent({reactive: true, style_class: 'torrents-controls'});
+        this.parent({reactive: false, style_class: 'torrents-controls'});
         this.actor.hide();
 
         this._old_info = "";
@@ -1261,7 +1268,7 @@ const TorrentsTopControls = new Lang.Class({
     Extends: TorrentsControls,
 
     _init: function () {
-        this.parent({reactive: true});
+        this.parent({reactive: false});
 
         this.add_box = new St.BoxLayout({vertical: false,
                                          style_class: 'torrents-add'});

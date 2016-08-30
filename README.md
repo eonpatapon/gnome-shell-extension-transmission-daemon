@@ -22,6 +22,7 @@ https://extensions.gnome.org/extension/365/transmission-daemon-indicator/
     cd gnome-shell-extension-transmission-daemon
     # For gnome-shell < 3.10 use the gnome-shell-3.8 branch
     # For gnome-shell < 3.16 use the gnome-shell-3.14 branch
+    # For gnome-shell < 3.30 use the gnome-shell-3.18 branch
     cp -r transmission-daemon@patapon.info ~/.local/share/gnome-shell/extensions
 
 Restart the shell and then enable the extension.
