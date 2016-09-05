@@ -1054,7 +1054,7 @@ const TransmissionTorrent = new Lang.Class({
                 break;
         }
         Clutter.cairo_set_source_color(cr, color);
-        cr.rectangle(27, 0, widthDownloaded, height);
+        cr.rectangle(padding, 0, widthDownloaded, height);
         Clutter.cairo_set_source_color(cr, color);
         cr.fillPreserve();
         cr.setLineWidth(borderWidth);
@@ -1074,7 +1074,7 @@ const TransmissionTorrent = new Lang.Class({
             color = uploadedColor;
             border_color = seedBorderColor;
             Clutter.cairo_set_source_color(cr, color);
-            cr.rectangle(0, 0, widthUploaded, height);
+            cr.rectangle(padding, 0, widthUploaded, height);
             Clutter.cairo_set_source_color(cr, color);
             cr.fillPreserve();
             cr.setLineWidth(borderWidth);
