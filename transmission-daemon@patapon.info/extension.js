@@ -123,10 +123,8 @@ let gsettings;
 let transmissionDaemonMonitor;
 let transmissionDaemonIndicator;
 
-if (!_httpSession) {
-    const _httpSession = new Soup.SessionAsync();
-    _httpSession.timeout = 10;
-}
+const _httpSession = new Soup.SessionAsync();
+_httpSession.timeout = 10;
 
 if (Soup.Session.prototype.add_feature !== null)
         Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
