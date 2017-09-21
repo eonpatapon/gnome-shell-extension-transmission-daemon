@@ -1,3 +1,8 @@
+# ==================
+# This project is not maintained here anymore
+# Please check https://github.com/TheKevJames/gnome-shell-extension-transmission-daemon
+# ==================
+
 # gnome-shell-extension-transmission-daemon
 
 Monitor a remote transmission-daemon or transmission GTK app using its RPC interface.
